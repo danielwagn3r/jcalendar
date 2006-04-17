@@ -1,6 +1,6 @@
 /*
- * JDateChooserBeanInfo.java  - Bean Info for JDateChooser
- *  Copyright (C) 2004 Kai Toedter
+ * DateChooserPanelBeanInfo.java  - Bean Info for JDateChooser
+ *  Copyright (C) 2006 Kai Toedter
  *  kai@toedter.com
  *  www.toedter.com
  *
@@ -23,10 +23,10 @@ package com.toedter.calendar;
 import com.toedter.components.GenericBeanInfo;
 
 /**
- * A BeanInfo class for the JDateChooser bean.
+ * A BeanInfo class for the JDateChooser panel.
  * 
  * @author Kai Toedter
- * @version 1.2
+ * @version $LastChangedRevision: 9 $ $LastChangedDate: 2004-10-17 21:11:43 +0200 (So, 17 Okt 2004) $
  */
 public class JDateChooserBeanInfo extends GenericBeanInfo {
 	/**

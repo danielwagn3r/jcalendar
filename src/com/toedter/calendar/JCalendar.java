@@ -1,5 +1,6 @@
 /*
- *  Copyright (C) 2004 Kai Toedter
+ *  JCalendar.java  - A bean for choosing a date
+  *  Copyright (C) 2004 Kai Toedter
  *  kai@toedter.com
  *  www.toedter.com
  *
@@ -17,6 +18,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+
 package com.toedter.calendar;
 
 import java.awt.BorderLayout;
@@ -37,10 +39,12 @@ import javax.swing.JPanel;
  * JCalendar is a bean for entering a date by choosing the year, month and day.
  *
  * @author Kai Toedter
- * @version 1.2
+ * @version $LastChangedRevision: 17 $ $LastChangedDate: 2004-12-05 18:09:04 +0100 (So, 05 Dez 2004) $
  */
 public class JCalendar extends JPanel implements PropertyChangeListener {
-    private Calendar calendar;
+ 	private static final long serialVersionUID = 8913369762644440133L;
+
+	private Calendar calendar;
 
     /** the day chooser */
     protected JDayChooser dayChooser;
@@ -67,21 +71,22 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
     }
 
     /**
-     * JCalendar constructor specifying the month spinner type.
-     *
-     * @param monthSpinner false, if no month spinner should be used
-     */
-    public JCalendar(boolean monthSpinner) {
-        this(null, null, monthSpinner, true);
-    }
-
-    /**
      * JCalendar constructor which allows the initial date to be set.
      *
      * @param date the date
      */
     public JCalendar(Date date) {
         this(date, null, true, true);
+    }
+
+    /**
+     * JCalendar constructor which allows the initial calendar to be set.
+     *
+     * @param calendar the calendar
+     */
+    public JCalendar(Calendar calendar) {
+        this(null, null, true, true);
+        setCalendar(calendar);
     }
 
     /**
@@ -125,6 +130,15 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
     }
 
     /**
+     * JCalendar constructor specifying the month spinner type.
+     *
+     * @param monthSpinner false, if no month spinner should be used
+     */
+    public JCalendar(boolean monthSpinner) {
+    	this(null, null, monthSpinner, true);
+    }
+    
+    /**
      * JCalendar constructor with month spinner parameter.
      *
      * @param date the date
@@ -134,6 +148,9 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
      */
     public JCalendar(Date date, Locale locale, boolean monthSpinner,
         boolean weekOfYearVisible) {
+        
+        setName("JCalendar");
+        
         // needed for setFont() etc.
         dayChooser = null;
         monthChooser = null;
@@ -186,7 +203,9 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
      */
     public static void main(String[] s) {
         JFrame frame = new JFrame("JCalendar");
-        frame.getContentPane().add(new JCalendar());
+
+        JCalendar jcalendar = new JCalendar();
+        frame.getContentPane().add(jcalendar);
         frame.pack();
         frame.setVisible(true);
     }
@@ -227,15 +246,6 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
      */
     public JMonthChooser getMonthChooser() {
         return monthChooser;
-    }
-
-    /**
-     * Returns "JCalendar".
-     *
-     * @return "JCalendar"
-     */
-    public String getName() {
-        return "JCalendar";
     }
 
     /**
@@ -314,6 +324,9 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
      * @param update the new calendar value
      */
     private void setCalendar(Calendar c, boolean update) {
+    	if(c == null) {
+    		setDate(null);
+    	}
         Calendar oldCalendar = calendar;
         calendar = c;
 
