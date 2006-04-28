@@ -21,6 +21,7 @@
 
 package com.toedter.calendar.demo;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.beans.PropertyChangeEvent;
@@ -36,13 +37,12 @@ import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JSpinnerDateEditor;
 
 /**
- * A demonstration panel includeing several JDateChoosers.
+ * A demonstration panel including several JDateChoosers.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 12 $ $LastChangedDate: 2004-10-17 22:27:20
- *          +0200 (So, 17 Okt 2004) $
+ * @version $LastChangedRevision: 85 $
+ * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
  */
-
 public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 	private static final long serialVersionUID = -1282280858252793253L;
 	private JComponent[] components;
@@ -81,6 +81,15 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		grid.setConstraints(component, c);
 		add(component);
+		JPanel blankLine  = new JPanel() {
+			private static final long serialVersionUID = 4514530330521503732L;
+
+			public Dimension getPreferredSize() {
+				return new Dimension(10,3);
+			}
+		};
+		grid.setConstraints(blankLine, c);
+		add(blankLine);
 	}
 
 	/**
@@ -133,14 +142,35 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 		}
 	}
 
+	/**
+	 * Returns the locale of the first JDateChooser.
+	 */
 	public Locale getLocale() {
 		return ((JDateChooser) components[0]).getLocale();
 	}
 
+	/**
+	 * Sets the locale of the first 4 JDateChoosers.
+	 */
 	public void setLocale(Locale locale) {
-		for (int i = 0; i < 4; i++) {
-			((JDateChooser) components[i]).setLocale(locale);
+		for (int i = 0; i < 5; i++) {
+			components[i].setLocale(locale);
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see java.awt.Component#isEnabled()
+	 */
+	public boolean isEnabled() {
+		return ((JDateChooser) components[0]).isEnabled();
+	}
+	
+	/* (non-Javadoc)
+	 * @see javax.swing.JComponent#setEnabled(boolean)
+	 */
+	public void setEnabled(boolean enabled) {
+		for (int i = 0; i < 5; i++) {
+			components[i].setEnabled(enabled);
+		}		
+	}
 }

@@ -31,8 +31,9 @@ import javax.swing.JComponent;
  * interface.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 17 $ $LastChangedDate: 2004-12-05 18:09:04
- *          +0100 (So, 05 Dez 2004) $
+ * @version $LastChangedRevision: 85 $
+ * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
+ * 
  */
 public interface IDateEditor {
 
@@ -54,9 +55,12 @@ public interface IDateEditor {
 	public void setDate(Date date);
 
 	/**
-	 * Sets the date format string, e.g. "MM/dd/yy"
+	 * Sets the date format string, e.g. "MM/dd/yy". If the date format string
+	 * is null or invalid, the date format string will be set to the MEDIUM
+	 * Simple date format of the current locale.
 	 * 
 	 * @param dateFormatString
+	 *            the date format string
 	 */
 	public void setDateFormatString(String dateFormatString);
 
@@ -103,10 +107,32 @@ public interface IDateEditor {
 	public void addPropertyChangeListener(PropertyChangeListener listener);
 
 	/**
+	 * Adds a property change listener that should be added to the implementing
+	 * UI component. The UI component should fire a "date" property if the date
+	 * changes.
+	 * 
+	 * @param propertyName
+	 *            the property name, e.g. "date"
+	 * @param listener
+	 *            the property change listener.
+	 */
+	public void addPropertyChangeListener(String propertyName, PropertyChangeListener listener);
+
+	/**
 	 * Removes a property change listener.
 	 * 
 	 * @param listener
 	 *            the property change listener.
 	 */
 	public void removePropertyChangeListener(PropertyChangeListener listener);
+
+	/**
+	 * Removes the listener from the date editor's property change listeners for the specific property.
+	 * 
+	 * @param propertyName
+	 *            the property to listen for, e.g. "date"
+	 * @param listener
+	 *            the listener
+	 */
+	public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener);
 }

@@ -30,8 +30,8 @@ import javax.swing.plaf.metal.DefaultMetalTheme;
  * the great Plastic3D Look and feel by JGoddies (www.jgoodies.com)
  * 
  * @author Kai Toedter
- * @author (Last changed by: $author$)
- * @version $LastChangedRevision: 9 $ $LastChangedDate: 2004-10-17 21:11:43 +0200 (So, 17 Okt 2004) $
+ * @version $LastChangedRevision: 85 $
+ * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
  */
 public class JCalendarTheme extends DefaultMetalTheme {
 	static final ColorUIResource secondary1 = new ColorUIResource(128, 128, 128);
@@ -54,164 +54,74 @@ public class JCalendarTheme extends DefaultMetalTheme {
 	public JCalendarTheme() {
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	public String getName() {
 		return "JCalendar Theme";
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	protected Font getFont() {
 		return new Font("Dialog", Font.PLAIN, 12);
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	public FontUIResource getSystemTextFont() {
 		return standardFont;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	public FontUIResource getUserTextFont() {
 		return standardFont;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	public FontUIResource getControlTextFont() {
 		return standardFont;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	public FontUIResource getMenuTextFont() {
 		return standardFont;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	protected ColorUIResource getPrimary1() {
 		return BLUE_MEDIUM_DARK;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	protected ColorUIResource getPrimary2() {
 		return BLUE_LOW_MEDIUM;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	protected ColorUIResource getPrimary3() {
 		return BLUE_LOW_LIGHTEST;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	protected ColorUIResource getSecondary1() {
 		return secondary1;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	protected ColorUIResource getSecondary2() {
 		return secondary2;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	protected ColorUIResource getSecondary3() {
 		return secondary3;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	public ColorUIResource getFocusColor() {
 		return ORANGE_FOCUS;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	public ColorUIResource getPrimaryControlShadow() {
 		return getPrimary3();
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	public ColorUIResource getMenuSelectedBackground() {
 		return getPrimary1();
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	public ColorUIResource getMenuSelectedForeground() {
 		return WHITE;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	public ColorUIResource getMenuItemBackground() {
 		return WHITE;
 	}
 
-	/**
-	 * DOCUMENT ME!
-	 * 
-	 * @return DOCUMENT ME!
-	 */
 	public ColorUIResource getToggleButtonCheckColor() {
 		return GREEN_CHECK;
 	}

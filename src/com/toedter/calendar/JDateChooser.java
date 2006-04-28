@@ -21,6 +21,7 @@
 package com.toedter.calendar;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,9 +50,9 @@ import javax.swing.event.ChangeListener;
  * JTextFieldDateEditor is used as default.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 18 $ $LastChangedDate: 2004-12-20 07:58:43
- *          +0100 (Mo, 20 Dez 2004) $
- */
+ * @version $LastChangedRevision: 85 $
+ * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
+*/
 public class JDateChooser extends JPanel implements ActionListener,
 		PropertyChangeListener {
 
@@ -71,18 +72,16 @@ public class JDateChooser extends JPanel implements ActionListener,
 
 	protected Date lastSelectedDate;
 
-	protected ImageIcon icon;
-
 	/**
-	 * Creates a new JDateChooser object. By default, no date is set and the
-	 * textfield is empty.
+	 * Creates a new JDateChooser. By default, no date is set and the textfield
+	 * is empty.
 	 */
 	public JDateChooser() {
 		this(null, null, null, null);
 	}
 
 	/**
-	 * Creates a new JDateChooser object.
+	 * Creates a new JDateChooser with given IDateEditor.
 	 * 
 	 * @param dateEditor
 	 *            the dateEditor to be used used to display the date. if null, a
@@ -177,12 +176,14 @@ public class JDateChooser extends JPanel implements ActionListener,
 			jcalendar = new JCalendar(date);
 		} else {
 			jcalendar = jcal;
-			jcalendar.setDate(date);
+			if (date != null) {
+				jcalendar.setDate(date);
+			}
 		}
 
 		setLayout(new BorderLayout());
 
-		jcalendar.getDayChooser().addPropertyChangeListener(this);
+		jcalendar.getDayChooser().addPropertyChangeListener("day", this);
 		// always fire"day" property even if the user selects
 		// the already selected day again
 		jcalendar.getDayChooser().setAlwaysFireDayProperty(true);
@@ -191,11 +192,9 @@ public class JDateChooser extends JPanel implements ActionListener,
 		setDate(date);
 
 		// Display a calendar button with an icon
-		if (icon == null) {
-			URL iconURL = getClass().getResource(
-					"/com/toedter/calendar/images/JDateChooserIcon.gif");
-			icon = new ImageIcon(iconURL);
-		}
+		URL iconURL = getClass().getResource(
+				"/com/toedter/calendar/images/JDateChooserIcon.gif");
+		ImageIcon icon = new ImageIcon(iconURL);
 
 		calendarButton = new JButton(icon) {
 			private static final long serialVersionUID = -1913767779079949668L;
@@ -293,7 +292,7 @@ public class JDateChooser extends JPanel implements ActionListener,
 
 	/**
 	 * Listens for a "date" property change or a "day" property change event
-	 * from the JCalendar. Updates the dateSpinner and closes the popup.
+	 * from the JCalendar. Updates the date editor and closes the popup.
 	 * 
 	 * @param evt
 	 *            the event
@@ -315,6 +314,7 @@ public class JDateChooser extends JPanel implements ActionListener,
 	 */
 	public void updateUI() {
 		super.updateUI();
+		setEnabled(isEnabled());
 
 		if (jcalendar != null) {
 			SwingUtilities.updateComponentTreeUI(popup);
@@ -328,6 +328,7 @@ public class JDateChooser extends JPanel implements ActionListener,
 	 *            The new locale value
 	 */
 	public void setLocale(Locale l) {
+		super.setLocale(l);
 		dateEditor.setLocale(l);
 		jcalendar.setLocale(l);
 	}
@@ -414,8 +415,10 @@ public class JDateChooser extends JPanel implements ActionListener,
 	 */
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
-		dateEditor.setEnabled(enabled);
-		calendarButton.setEnabled(enabled);
+		if (dateEditor != null) {
+			dateEditor.setEnabled(enabled);
+			calendarButton.setEnabled(enabled);
+		}
 	}
 
 	/**
@@ -428,11 +431,103 @@ public class JDateChooser extends JPanel implements ActionListener,
 	}
 
 	/**
+	 * Sets the icon of the buuton.
+	 * 
 	 * @param icon
-	 *            The icon to set.
+	 *            The new icon
 	 */
 	public void setIcon(ImageIcon icon) {
-		this.icon = icon;
+		calendarButton.setIcon(icon);
+	}
+
+	/**
+	 * Adds the listener to the date editor's property change listener.
+	 * 
+	 * @param listener
+	 *            the listener
+	 */
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+		dateEditor.addPropertyChangeListener(listener);
+	}
+
+	/**
+	 * Adds the listener for the given property name to the date editor's
+	 * property change listener.
+	 * 
+	 * @param propertyName
+	 *            the property to listen for, e.g. "date"
+	 * @param listener
+	 *            the listener
+	 */
+	public void addPropertyChangeListener(String propertyName,
+			PropertyChangeListener listener) {
+		dateEditor.addPropertyChangeListener(propertyName, listener);
+	}
+
+	/**
+	 * Removes the listener from the date editor's property change listeners.
+	 * 
+	 * @param listener
+	 *            the listener
+	 */
+	public void removePropertyChangeListener(PropertyChangeListener listener) {
+		dateEditor.removePropertyChangeListener(listener);
+	}
+
+	/**
+	 * Removes the listener from the date editor's property change listeners for
+	 * the specific property.
+	 * 
+	 * @param propertyName
+	 *            the property to listen for, e.g. "date"
+	 * @param listener
+	 *            the listener
+	 */
+	public void removePropertyChangeListener(String propertyName,
+			PropertyChangeListener listener) {
+		dateEditor.removePropertyChangeListener(propertyName, listener);
+	}
+
+	/**
+	 * Sets the font of all subcomponents.
+	 * 
+	 * @param font
+	 *            the new font
+	 */
+	public void setFont(Font font) {
+		if (isInitialized) {
+			dateEditor.getUiComponent().setFont(font);
+			jcalendar.setFont(font);
+		}
+		super.setFont(font);
+	}
+
+	/**
+	 * Returns the JCalendar component. THis is usefull if you want to set some
+	 * properties.
+	 * 
+	 * @return the JCalendar
+	 */
+	public JCalendar getJCalendar() {
+		return jcalendar;
+	}
+
+	/**
+	 * Returns the calendar button.
+	 * 
+	 * @return the calendar button
+	 */
+	public JButton getCalendarButton() {
+		return calendarButton;
+	}
+
+	/**
+	 * Returns the date editor.
+	 * 
+	 * @return the date editor
+	 */
+	public IDateEditor getDateEditor() {
+		return dateEditor;
 	}
 
 	/**
@@ -443,21 +538,24 @@ public class JDateChooser extends JPanel implements ActionListener,
 	 */
 	public static void main(String[] s) {
 		JFrame frame = new JFrame("JDateChooser");
-		// JDateChooser dateChooser = new JDateChooser();
-		JDateChooser dateChooser = new JDateChooser(null, new Date(), null,
-				null);
+		JDateChooser dateChooser = new JDateChooser();
+		// JDateChooser dateChooser = new JDateChooser(null, new Date(), null,
+		// null);
 		// dateChooser.setLocale(new Locale("de"));
 		// dateChooser.setDateFormatString("dd. MMMM yyyy");
+
+		// dateChooser.setPreferredSize(new Dimension(130, 20));
+		// dateChooser.setFont(new Font("Verdana", Font.PLAIN, 10));
+		// dateChooser.setDateFormatString("yyyy-MM-dd HH:mm");
+
+		// URL iconURL = dateChooser.getClass().getResource(
+		// "/com/toedter/calendar/images/JMonthChooserColor32.gif");
+		// ImageIcon icon = new ImageIcon(iconURL);
+		// dateChooser.setIcon(icon);
+
 		frame.getContentPane().add(dateChooser);
 		frame.pack();
 		frame.setVisible(true);
 	}
 
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		dateEditor.addPropertyChangeListener(listener);
-	}
-
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		dateEditor.removePropertyChangeListener(listener);
-	}
 }

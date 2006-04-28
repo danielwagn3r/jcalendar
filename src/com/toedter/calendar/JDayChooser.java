@@ -23,6 +23,7 @@ package com.toedter.calendar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -42,36 +43,69 @@ import java.util.Locale;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 /**
- * JCalendar is a bean for choosing a day.
+ * JDayChooser is a bean for choosing a day.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 17 $ $LastChangedDate: 2004-12-05 18:09:04
- *          +0100 (So, 05 Dez 2004) $
+ * @version $LastChangedRevision: 88 $
+ * @version $LastChangedDate: 2006-04-29 10:11:46 +0200 (Sa, 29 Apr 2006) $
  */
 public class JDayChooser extends JPanel implements ActionListener, KeyListener, FocusListener {
 	private static final long serialVersionUID = 5876398337018781820L;
+
 	protected JButton[] days;
+
 	protected JButton[] weeks;
+
 	protected JButton selectedDay;
+
 	protected JPanel weekPanel;
+
 	protected JPanel dayPanel;
+
 	protected int day;
+
 	protected Color oldDayBackgroundColor;
+
 	protected Color selectedColor;
+
 	protected Color sundayForeground;
+
 	protected Color weekdayForeground;
+
 	protected Color decorationBackgroundColor;
+
 	protected String[] dayNames;
+
 	protected Calendar calendar;
+
 	protected Calendar today;
+
 	protected Locale locale;
+
 	protected boolean initialized;
+
 	protected boolean weekOfYearVisible;
+
 	protected boolean decorationBackgroundVisible = true;
+
 	protected boolean decorationBordersVisible;
+
+	protected boolean dayBordersVisible;
+
 	private boolean alwaysFireDayProperty;
+
+	protected Date minSelectableDate;
+
+	protected Date maxSelectableDate;
+
+	protected Date defaultMinSelectableDate;
+
+	protected Date defaultMaxSelectableDate;
+
+	protected int maxDayCharacters;
 
 	/**
 	 * Default JDayChooser constructor.
@@ -116,22 +150,24 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 					// Create a button that doesn't react on clicks or focus
 					// changes.
 					// Thanks to Thomas Schaefer for the focus hint :)
-					days[index] = new JButton() {
-						private static final long serialVersionUID = -5306477668406547496L;
-
-						public void addMouseListener(MouseListener l) {
-						}
-
-						public boolean isFocusable() {
-							return false;
-						}
-					};
-
-					days[index].setContentAreaFilled(decorationBackgroundVisible);
-					days[index].setBorderPainted(decorationBordersVisible);
-					days[index].setBackground(decorationBackgroundColor);
+					days[index] = new DecoratorButton();
 				} else {
-					days[index] = new JButton("x");
+					days[index] = new JButton("x") {
+						private static final long serialVersionUID = -7433645992591669725L;
+
+						public void paint(Graphics g) {
+							if ("Windows".equals(UIManager.getLookAndFeel().getID())) {
+								// this is a hack to get the background painted
+								// when using Windows Look & Feel
+								if (selectedDay == this) {
+									g.setColor(selectedColor);
+									g.fillRect(0, 0, getWidth(), getHeight());
+								}
+							}
+							super.paint(g);
+						}
+
+					};
 					days[index].addActionListener(this);
 					days[index].addKeyListener(this);
 					days[index].addFocusListener(this);
@@ -148,23 +184,10 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 		weeks = new JButton[7];
 
 		for (int i = 0; i < 7; i++) {
-			weeks[i] = new JButton() {
-				private static final long serialVersionUID = -5780453242132894450L;
-
-				public void addMouseListener(MouseListener l) {
-				}
-
-				public boolean isFocusable() {
-					return false;
-				}
-			};
+			weeks[i] = new DecoratorButton();
 			weeks[i].setMargin(new Insets(0, 0, 0, 0));
 			weeks[i].setFocusPainted(false);
-			weeks[i].setBackground(decorationBackgroundColor);
 			weeks[i].setForeground(new Color(100, 100, 100));
-
-			weeks[i].setContentAreaFilled(decorationBackgroundVisible);
-			weeks[i].setBorderPainted(decorationBordersVisible);
 
 			if (i != 0) {
 				weeks[i].setText("0" + (i + 1));
@@ -173,8 +196,15 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 			weekPanel.add(weeks[i]);
 		}
 
+		Calendar tmpCalendar = Calendar.getInstance();
+		tmpCalendar.set(1, 0, 1, 1, 1);
+		defaultMinSelectableDate = tmpCalendar.getTime();
+		minSelectableDate = defaultMinSelectableDate;
+		tmpCalendar.set(9999, 0, 1, 1, 1);
+		defaultMaxSelectableDate = tmpCalendar.getTime();
+		maxSelectableDate = defaultMaxSelectableDate;
+
 		init();
-		drawWeeks();
 
 		setDay(Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 		add(dayPanel, BorderLayout.CENTER);
@@ -182,8 +212,8 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 		if (weekOfYearVisible) {
 			add(weekPanel, BorderLayout.WEST);
 		}
-
 		initialized = true;
+		updateUI();
 	}
 
 	/**
@@ -213,6 +243,12 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 		int day = firstDayOfWeek;
 
 		for (int i = 0; i < 7; i++) {
+			if (maxDayCharacters > 0 && maxDayCharacters < 5) {
+				if (dayNames[day].length() >= maxDayCharacters) {
+					dayNames[day] = dayNames[day].substring(0, maxDayCharacters);
+				}
+			}
+
 			days[i].setText(dayNames[day]);
 
 			if (day == 1) {
@@ -236,8 +272,12 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 		for (int x = 0; x < 7; x++) {
 			days[x].setContentAreaFilled(decorationBackgroundVisible);
 			days[x].setBorderPainted(decorationBordersVisible);
+			days[x].invalidate();
+			days[x].repaint();
 			weeks[x].setContentAreaFilled(decorationBackgroundVisible);
 			weeks[x].setBorderPainted(decorationBordersVisible);
+			weeks[x].invalidate();
+			weeks[x].repaint();
 		}
 	}
 
@@ -270,6 +310,25 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 	 */
 	protected void drawDays() {
 		Calendar tmpCalendar = (Calendar) calendar.clone();
+		tmpCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		tmpCalendar.set(Calendar.MINUTE, 0);
+		tmpCalendar.set(Calendar.SECOND, 0);
+		tmpCalendar.set(Calendar.MILLISECOND, 0);
+
+		Calendar minCal = Calendar.getInstance();
+		minCal.setTime(minSelectableDate);
+		minCal.set(Calendar.HOUR_OF_DAY, 0);
+		minCal.set(Calendar.MINUTE, 0);
+		minCal.set(Calendar.SECOND, 0);
+		minCal.set(Calendar.MILLISECOND, 0);
+
+		Calendar maxCal = Calendar.getInstance();
+		maxCal.setTime(maxSelectableDate);
+		maxCal.set(Calendar.HOUR_OF_DAY, 0);
+		maxCal.set(Calendar.MINUTE, 0);
+		maxCal.set(Calendar.SECOND, 0);
+		maxCal.set(Calendar.MILLISECOND, 0);
+
 		int firstDayOfWeek = tmpCalendar.getFirstDayOfWeek();
 		tmpCalendar.set(Calendar.DAY_OF_MONTH, 1);
 
@@ -313,6 +372,12 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 				days[i + n + 7].setBackground(oldDayBackgroundColor);
 			}
 
+			if (tmpCalendar.before(minCal) || tmpCalendar.after(maxCal)) {
+				days[i + n + 7].setEnabled(false);
+			} else {
+				days[i + n + 7].setEnabled(true);
+			}
+
 			n++;
 			tmpCalendar.add(Calendar.DATE, 1);
 			day = tmpCalendar.getTime();
@@ -322,6 +387,8 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 			days[k].setVisible(false);
 			days[k].setText("");
 		}
+		
+		drawWeeks();
 	}
 
 	/**
@@ -365,7 +432,6 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 		if (d < 1) {
 			d = 1;
 		}
-
 		Calendar tmpCalendar = (Calendar) calendar.clone();
 		tmpCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		tmpCalendar.add(Calendar.MONTH, 1);
@@ -389,7 +455,6 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 			if (days[i].getText().equals(Integer.toString(day))) {
 				selectedDay = days[i];
 				selectedDay.setBackground(selectedColor);
-
 				break;
 			}
 		}
@@ -442,7 +507,6 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 		alwaysFireDayProperty = storedMode;
 
 		drawDays();
-		drawWeeks();
 	}
 
 	/**
@@ -455,7 +519,6 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 	public void setYear(int year) {
 		calendar.set(Calendar.YEAR, year);
 		drawDays();
-		drawWeeks();
 	}
 
 	/**
@@ -476,10 +539,15 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 	 * @param font
 	 *            the new font
 	 */
-	public void setFont(Font font) {
+	public void setFont(Font font) {		
 		if (days != null) {
 			for (int i = 0; i < 49; i++) {
 				days[i].setFont(font);
+			}
+		}
+		if (weeks != null) {
+			for (int i = 0; i < 7; i++) {
+				weeks[i].setFont(font);
 			}
 		}
 	}
@@ -761,6 +829,10 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 		return decorationBordersVisible;
 	}
 
+	public boolean isDayBordersVisible() {
+		return dayBordersVisible;
+	}
+
 	/**
 	 * The decoration border is the button border of the day titles and the
 	 * weeks of the year.
@@ -771,6 +843,142 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 	public void setDecorationBordersVisible(boolean decorationBordersVisible) {
 		this.decorationBordersVisible = decorationBordersVisible;
 		initDecorations();
+	}
+
+	public void setDayBordersVisible(boolean dayBordersVisible) {
+		this.dayBordersVisible = dayBordersVisible;
+		if (initialized) {
+			for (int x = 7; x < 49; x++) {
+				if ("Windows".equals(UIManager.getLookAndFeel().getID())) {
+					days[x].setContentAreaFilled(dayBordersVisible);
+				} else {
+					days[x].setContentAreaFilled(true);
+				}
+				days[x].setBorderPainted(dayBordersVisible);
+			}
+		}
+	}
+
+	/**
+	 * Updates the UI and sets the day button preferences.
+	 */
+	public void updateUI() {
+		super.updateUI();
+		setFont(Font.decode("Dialog Plain 11"));
+
+		if (weekPanel != null) {
+			weekPanel.updateUI();
+		}
+		if (initialized) {
+			if ("Windows".equals(UIManager.getLookAndFeel().getID())) {
+				setDayBordersVisible(false);
+				setDecorationBackgroundVisible(true);
+				setDecorationBordersVisible(false);
+			} else {
+				setDayBordersVisible(true);
+				setDecorationBackgroundVisible(decorationBackgroundVisible);
+				setDecorationBordersVisible(decorationBordersVisible);
+			}
+		}
+	}
+
+	/**
+	 * Sets a valid date range for selectable dates. If max is before min, the
+	 * default range with no limitation is set.
+	 * 
+	 * @param min
+	 *            the minimum selectable date or null (then the minimum date is
+	 *            set to 01\01\0001)
+	 * @param max
+	 *            the maximum selectable date or null (then the maximum date is
+	 *            set to 01\01\9999)
+	 */
+	public void setSelectableDateRange(Date min, Date max) {
+		if (min == null) {
+			minSelectableDate = defaultMinSelectableDate;
+		} else {
+			minSelectableDate = min;
+		}
+		if (max == null) {
+			maxSelectableDate = defaultMaxSelectableDate;
+		} else {
+			maxSelectableDate = max;
+		}
+		if (maxSelectableDate.before(minSelectableDate)) {
+			minSelectableDate = defaultMinSelectableDate;
+			maxSelectableDate = defaultMaxSelectableDate;
+		}
+		drawDays();
+	}
+
+	public void setMaxSelectableDate(Date max) {
+		if (max == null) {
+			maxSelectableDate = defaultMaxSelectableDate;
+		} else {
+			maxSelectableDate = max;
+		}
+		drawDays();
+	}
+
+	public void setMinSelectableDate(Date min) {
+		if (min == null) {
+			minSelectableDate = defaultMinSelectableDate;
+		} else {
+			minSelectableDate = min;
+		}
+		drawDays();
+	}
+
+	/**
+	 * Gets the maximum selectable date.
+	 * 
+	 * @return the maximum selectable date
+	 */
+	public Date getMaxSelectableDate() {
+		return maxSelectableDate;
+	}
+
+	/**
+	 * Gets the minimum selectable date.
+	 * 
+	 * @return the minimum selectable date
+	 */
+	public Date getMinSelectableDate() {
+		return minSelectableDate;
+	}
+
+	/**
+	 * Gets the maximum number of characters of a day name or 0. If 0 is
+	 * returned, dateFormatSymbols.getShortWeekdays() will be used.
+	 * 
+	 * @return the maximum number of characters of a day name or 0.
+	 */
+	public int getMaxDayCharacters() {
+		return maxDayCharacters;
+	}
+
+	/**
+	 * Sets the maximum number of characters per day in the day bar. Valid
+	 * values are 0-4. If set to 0, dateFormatSymbols.getShortWeekdays() will be
+	 * used, otherwise theses strings will be reduced to the maximum number of
+	 * characters.
+	 * 
+	 * @param maxDayCharacters
+	 *            the maximum number of characters of a day name.
+	 */
+	public void setMaxDayCharacters(int maxDayCharacters) {
+		if (maxDayCharacters == this.maxDayCharacters) {
+			return;
+		}
+
+		if (maxDayCharacters < 0 || maxDayCharacters > 4) {
+			this.maxDayCharacters = 0;
+		} else {
+			this.maxDayCharacters = maxDayCharacters;
+		}
+		drawDayNames();
+		drawDays();
+		invalidate();
 	}
 
 	/**
@@ -785,4 +993,40 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 		frame.pack();
 		frame.setVisible(true);
 	}
+
+	class DecoratorButton extends JButton {
+		private static final long serialVersionUID = -5306477668406547496L;
+
+		public DecoratorButton() {
+			setBackground(decorationBackgroundColor);
+			setContentAreaFilled(decorationBackgroundVisible);
+			setBorderPainted(decorationBordersVisible);
+		}
+
+		public void addMouseListener(MouseListener l) {
+		}
+
+		public boolean isFocusable() {
+			return false;
+		}
+
+		public void paint(Graphics g) {
+			if ("Windows".equals(UIManager.getLookAndFeel().getID())) {
+				// this is a hack to get the background painted
+				// when using Windows Look & Feel
+				if (decorationBackgroundVisible) {
+					g.setColor(decorationBackgroundColor);
+				} else {
+					g.setColor(days[7].getBackground());
+				}
+				g.fillRect(0, 0, getWidth(), getHeight());
+				if (isBorderPainted()) {
+					setContentAreaFilled(true);
+				} else {
+					setContentAreaFilled(false);
+				}
+			}
+			super.paint(g);
+		}
+	};
 }
