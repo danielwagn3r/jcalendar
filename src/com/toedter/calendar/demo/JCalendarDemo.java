@@ -85,8 +85,8 @@ import com.toedter.components.JTitlePanel;
  * as Java application.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 85 $
- * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
+ * @version $LastChangedRevision: 103 $
+ * @version $LastChangedDate: 2006-06-04 14:57:02 +0200 (So, 04 Jun 2006) $
  */
 public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 	private static final long serialVersionUID = 6739986412544494316L;
@@ -651,7 +651,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 			JOptionPane
 					.showMessageDialog(
 							demo,
-							"JCalendar Demo\nVersion 1.3.0\n\nKai Toedter\nkai@toedter.com\nwww.toedter.com",
+							"JCalendar Demo\nVersion 1.3.2\n\nKai Toedter\nkai@toedter.com\nwww.toedter.com",
 							"About...", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}

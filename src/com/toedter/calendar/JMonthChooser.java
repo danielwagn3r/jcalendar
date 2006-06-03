@@ -45,8 +45,8 @@ import javax.swing.event.ChangeListener;
  * JMonthChooser is a bean for choosing a month.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 85 $
- * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
+ * @version $LastChangedRevision: 100 $
+ * @version $LastChangedDate: 2006-06-04 14:36:06 +0200 (So, 04 Jun 2006) $
  */
 public class JMonthChooser extends JPanel implements ItemListener,
 		ChangeListener {
@@ -360,11 +360,11 @@ public class JMonthChooser extends JPanel implements ItemListener,
 		return hasSpinner;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.swing.JComponent#setFont(java.awt.Font)
-	 */
+    /**
+     * Sets the font for this component.
+     *
+     * @param font the desired <code>Font</code> for this component
+     */
 	public void setFont(Font font) {
 		if (comboBox != null) {
 			comboBox.setFont(font);
@@ -372,6 +372,11 @@ public class JMonthChooser extends JPanel implements ItemListener,
 		super.setFont(font);
 	}
 
+	/**
+	 * Updates the UI.
+	 * 
+	 * @see javax.swing.JPanel#updateUI()
+	 */
 	public void updateUI() {
 		final JSpinner testSpinner = new JSpinner();
 		if (spinner != null) {

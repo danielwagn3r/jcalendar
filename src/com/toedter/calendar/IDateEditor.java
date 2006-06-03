@@ -31,8 +31,8 @@ import javax.swing.JComponent;
  * interface.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 85 $
- * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
+ * @version $LastChangedRevision: 96 $
+ * @version $LastChangedDate: 2006-05-12 18:19:35 +0200 (Fr, 12 Mai 2006) $
  * 
  */
 public interface IDateEditor {
@@ -70,6 +70,47 @@ public interface IDateEditor {
 	 * @return the date format string
 	 */
 	public String getDateFormatString();
+
+	/**
+	 * Sets a valid date range for selectable dates. If max is before
+	 * min, the default range with no limitation is set.
+	 * 
+	 * @param min
+	 *            the minimum selectable date or null (then the minimum date should be
+	 *            set to 01\01\0001)
+	 * @param max
+	 *            the maximum selectable date or null (then the maximum date should be
+	 *            set to 01\01\9999)
+	 */
+	public void setSelectableDateRange(Date min, Date max) ;
+
+	/**
+	 * Gets the minimum selectable date.
+	 * 
+	 * @return the minimum selectable date
+	 */
+	public Date getMaxSelectableDate();
+	
+	/**
+	 * Gets the maximum selectable date.
+	 * 
+	 * @return the maximum selectable date
+	 */
+	public Date getMinSelectableDate();
+
+	/**
+	 * Sets the maximum selectable date.
+	 * 
+	 * @param max maximum selectable date
+	 */
+	public void setMaxSelectableDate(Date max);
+
+	/**
+	 * Sets the minimum selectable date.
+	 * 
+	 * @param min minimum selectable date
+	 */
+	public void setMinSelectableDate(Date min);
 
 	/**
 	 * Returns the UI component, e.g. the actual JTextField implementing the

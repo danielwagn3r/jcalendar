@@ -50,9 +50,9 @@ import javax.swing.event.ChangeListener;
  * JTextFieldDateEditor is used as default.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 85 $
- * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
-*/
+ * @version $LastChangedRevision: 101 $
+ * @version $LastChangedDate: 2006-06-04 14:42:29 +0200 (So, 04 Jun 2006) $
+ */
 public class JDateChooser extends JPanel implements ActionListener,
 		PropertyChangeListener {
 
@@ -71,6 +71,8 @@ public class JDateChooser extends JPanel implements ActionListener,
 	protected boolean dateSelected;
 
 	protected Date lastSelectedDate;
+
+	private ChangeListener changeListener;
 
 	/**
 	 * Creates a new JDateChooser. By default, no date is set and the textfield
@@ -171,6 +173,7 @@ public class JDateChooser extends JPanel implements ActionListener,
 		if (this.dateEditor == null) {
 			this.dateEditor = new JTextFieldDateEditor();
 		}
+		this.dateEditor.addPropertyChangeListener("date", this);
 
 		if (jcal == null) {
 			jcalendar = new JCalendar(date);
@@ -238,32 +241,33 @@ public class JDateChooser extends JPanel implements ActionListener,
 		// Corrects a problem that occured when the JMonthChooser's combobox is
 		// displayed, and a click outside the popup does not close it.
 
-		// The following code was provided by forum user podiatanapraia:
-		MenuSelectionManager.defaultManager().addChangeListener(
-				new ChangeListener() {
-					boolean hasListened = false;
+		// The following idea was originally provided by forum user
+		// podiatanapraia:
+		changeListener = new ChangeListener() {
+			boolean hasListened = false;
 
-					public void stateChanged(ChangeEvent e) {
-						if (hasListened) {
-							hasListened = false;
-							return;
-						}
-						if (popup.isVisible()
-								&& JDateChooser.this.jcalendar.monthChooser
-										.getComboBox().hasFocus()) {
-							MenuElement[] me = MenuSelectionManager
-									.defaultManager().getSelectedPath();
-							MenuElement[] newMe = new MenuElement[me.length + 1];
-							newMe[0] = popup;
-							for (int i = 0; i < me.length; i++) {
-								newMe[i + 1] = me[i];
-							}
-							hasListened = true;
-							MenuSelectionManager.defaultManager()
-									.setSelectedPath(newMe);
-						}
+			public void stateChanged(ChangeEvent e) {
+				if (hasListened) {
+					hasListened = false;
+					return;
+				}
+				if (popup.isVisible()
+						&& JDateChooser.this.jcalendar.monthChooser
+								.getComboBox().hasFocus()) {
+					MenuElement[] me = MenuSelectionManager.defaultManager()
+							.getSelectedPath();
+					MenuElement[] newMe = new MenuElement[me.length + 1];
+					newMe[0] = popup;
+					for (int i = 0; i < me.length; i++) {
+						newMe[i + 1] = me[i];
 					}
-				});
+					hasListened = true;
+					MenuSelectionManager.defaultManager()
+							.setSelectedPath(newMe);
+				}
+			}
+		};
+		MenuSelectionManager.defaultManager().addChangeListener(changeListener);
 		// end of code provided by forum user podiatanapraia
 
 		isInitialized = true;
@@ -305,7 +309,11 @@ public class JDateChooser extends JPanel implements ActionListener,
 				setDate(jcalendar.getCalendar().getTime());
 			}
 		} else if (evt.getPropertyName().equals("date")) {
-			setDate((Date) evt.getNewValue());
+			if (evt.getSource() == dateEditor) {
+				firePropertyChange("date", evt.getOldValue(), evt.getNewValue());
+			} else {
+				setDate((Date) evt.getNewValue());
+			}
 		}
 	}
 
@@ -441,54 +449,6 @@ public class JDateChooser extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * Adds the listener to the date editor's property change listener.
-	 * 
-	 * @param listener
-	 *            the listener
-	 */
-	public void addPropertyChangeListener(PropertyChangeListener listener) {
-		dateEditor.addPropertyChangeListener(listener);
-	}
-
-	/**
-	 * Adds the listener for the given property name to the date editor's
-	 * property change listener.
-	 * 
-	 * @param propertyName
-	 *            the property to listen for, e.g. "date"
-	 * @param listener
-	 *            the listener
-	 */
-	public void addPropertyChangeListener(String propertyName,
-			PropertyChangeListener listener) {
-		dateEditor.addPropertyChangeListener(propertyName, listener);
-	}
-
-	/**
-	 * Removes the listener from the date editor's property change listeners.
-	 * 
-	 * @param listener
-	 *            the listener
-	 */
-	public void removePropertyChangeListener(PropertyChangeListener listener) {
-		dateEditor.removePropertyChangeListener(listener);
-	}
-
-	/**
-	 * Removes the listener from the date editor's property change listeners for
-	 * the specific property.
-	 * 
-	 * @param propertyName
-	 *            the property to listen for, e.g. "date"
-	 * @param listener
-	 *            the listener
-	 */
-	public void removePropertyChangeListener(String propertyName,
-			PropertyChangeListener listener) {
-		dateEditor.removePropertyChangeListener(propertyName, listener);
-	}
-
-	/**
 	 * Sets the font of all subcomponents.
 	 * 
 	 * @param font
@@ -528,6 +488,62 @@ public class JDateChooser extends JPanel implements ActionListener,
 	 */
 	public IDateEditor getDateEditor() {
 		return dateEditor;
+	}
+
+	/**
+	 * Sets a valid date range for selectable dates. If max is before min, the
+	 * default range with no limitation is set.
+	 * 
+	 * @param min
+	 *            the minimum selectable date or null (then the minimum date is
+	 *            set to 01\01\0001)
+	 * @param max
+	 *            the maximum selectable date or null (then the maximum date is
+	 *            set to 01\01\9999)
+	 */
+	public void setSelectableDateRange(Date min, Date max) {
+		jcalendar.setSelectableDateRange(min, max);
+		dateEditor.setSelectableDateRange(jcalendar.getMinSelectableDate(),
+				jcalendar.getMaxSelectableDate());
+	}
+
+	public void setMaxSelectableDate(Date max) {
+		jcalendar.setMaxSelectableDate(max);
+		dateEditor.setMaxSelectableDate(max);
+	}
+
+	public void setMinSelectableDate(Date min) {
+		jcalendar.setMinSelectableDate(min);
+		dateEditor.setMinSelectableDate(min);
+	}
+
+	/**
+	 * Gets the maximum selectable date.
+	 * 
+	 * @return the maximum selectable date
+	 */
+	public Date getMaxSelectableDate() {
+		return jcalendar.getMaxSelectableDate();
+	}
+
+	/**
+	 * Gets the minimum selectable date.
+	 * 
+	 * @return the minimum selectable date
+	 */
+	public Date getMinSelectableDate() {
+		return jcalendar.getMinSelectableDate();
+	}
+
+	/**
+	 * Should only be invoked if the JDateChooser is not used anymore. Due to popup
+	 * handling it had to register a change listener to the default menu
+	 * selection manager which will be unregistered here. Use this method to
+	 * cleanup possible memory leaks.
+	 */
+	public void cleanup() {
+		MenuSelectionManager.defaultManager().removeChangeListener(changeListener);
+		changeListener = null;
 	}
 
 	/**

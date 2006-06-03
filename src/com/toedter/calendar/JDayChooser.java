@@ -49,8 +49,8 @@ import javax.swing.UIManager;
  * JDayChooser is a bean for choosing a day.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 88 $
- * @version $LastChangedDate: 2006-04-29 10:11:46 +0200 (Sa, 29 Apr 2006) $
+ * @version $LastChangedRevision: 104 $
+ * @version $LastChangedDate: 2006-06-04 15:20:45 +0200 (So, 04 Jun 2006) $
  */
 public class JDayChooser extends JPanel implements ActionListener, KeyListener, FocusListener {
 	private static final long serialVersionUID = 5876398337018781820L;
@@ -496,7 +496,11 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 	 *            the new month
 	 */
 	public void setMonth(int month) {
+		int maxDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 		calendar.set(Calendar.MONTH, month);
+		if(maxDays == day) {
+			day = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		}
 
 		// Since the day does not change,
 		// don't fire a day property change, even if alwaysFireDayProperty is
@@ -911,22 +915,38 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener, 
 		drawDays();
 	}
 
-	public void setMaxSelectableDate(Date max) {
+	/**
+	 * Sets the maximum selectable date. If null, the date 01\01\9999 will be set instead.
+	 * 
+	 * @param max the maximum selectable date
+	 * 
+	 * @return the maximum selectable date
+	 */
+	public Date setMaxSelectableDate(Date max) {
 		if (max == null) {
 			maxSelectableDate = defaultMaxSelectableDate;
 		} else {
 			maxSelectableDate = max;
 		}
 		drawDays();
+		return maxSelectableDate;
 	}
 
-	public void setMinSelectableDate(Date min) {
+	/**
+	 * Sets the minimum selectable date. If null, the date 01\01\0001 will be set instead.
+	 * 
+	 * @param min the minimum selectable date
+	 * 
+	 * @return the minimum selectable date
+	 */
+	public Date setMinSelectableDate(Date min) {
 		if (min == null) {
 			minSelectableDate = defaultMinSelectableDate;
 		} else {
 			minSelectableDate = min;
 		}
 		drawDays();
+		return minSelectableDate;
 	}
 
 	/**

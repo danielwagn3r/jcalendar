@@ -40,8 +40,8 @@ import com.toedter.calendar.JSpinnerDateEditor;
  * A demonstration panel including several JDateChoosers.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 85 $
- * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
+ * @version $LastChangedRevision: 96 $
+ * @version $LastChangedDate: 2006-05-12 18:19:35 +0200 (Fr, 12 Mai 2006) $
  */
 public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 	private static final long serialVersionUID = -1282280858252793253L;
@@ -172,5 +172,25 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 		for (int i = 0; i < 5; i++) {
 			components[i].setEnabled(enabled);
 		}		
+	}
+	
+	public Date getMinSelectableDate() {
+		return ((JDateChooser) components[0]).getMinSelectableDate();
+	}
+	
+	public void setMinSelectableDate(Date date) {
+		for (int i = 0; i < 4; i++) {
+			((JDateChooser) components[i]).setMinSelectableDate(date);
+		}
+	}
+	
+	public Date getMaxSelectableDate() {
+		return ((JDateChooser) components[0]).getMaxSelectableDate();
+	}
+	
+	public void setMaxSelectableDate(Date date) {
+		for (int i = 0; i < 4; i++) {
+			((JDateChooser) components[i]).setMaxSelectableDate(date);
+		}
 	}
 }

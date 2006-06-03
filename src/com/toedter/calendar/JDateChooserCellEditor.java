@@ -1,5 +1,5 @@
 /*
- *  JDateChooserCellEditor.java  - A bean for choosing a date
+ *  JDateChooserCellEditor.java  - A CellEditor for tables, using a JDateChooser
  *  Copyright (C) 2005 Kai Toedter
  *  kai@toedter.com
  *  www.toedter.com
@@ -32,8 +32,8 @@ import javax.swing.table.TableCellEditor;
  * A CellEditor for tables, using a JDateChooser.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 85 $
- * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
+ * @version $LastChangedRevision: 100 $
+ * @version $LastChangedDate: 2006-06-04 14:36:06 +0200 (So, 04 Jun 2006) $
  */
 public class JDateChooserCellEditor extends AbstractCellEditor implements
 		TableCellEditor {

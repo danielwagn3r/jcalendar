@@ -11,16 +11,18 @@ import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.UIManager;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * JSpinnerDateEditor is a date editor based on a JSpinner.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 85 $
- * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
+ * @version $LastChangedRevision: 100 $
+ * @version $LastChangedDate: 2006-06-04 14:36:06 +0200 (So, 04 Jun 2006) $
  */
 public class JSpinnerDateEditor extends JSpinner implements IDateEditor,
-		FocusListener {
+		FocusListener, ChangeListener {
 
 	private static final long serialVersionUID = 5692204052306085316L;
 
@@ -36,6 +38,10 @@ public class JSpinnerDateEditor extends JSpinner implements IDateEditor,
 				.getDateInstance(DateFormat.MEDIUM);
 		((JSpinner.DateEditor) getEditor()).getTextField().addFocusListener(
 				this);
+		DateUtil dateUtil = new DateUtil();
+		setMinSelectableDate(dateUtil.getMinSelectableDate());
+		setMaxSelectableDate(dateUtil.getMaxSelectableDate());
+		addChangeListener(this);
 	}
 
 	public Date getDate() {
@@ -46,17 +52,23 @@ public class JSpinnerDateEditor extends JSpinner implements IDateEditor,
 	}
 
 	public void setDate(Date date) {
+		setDate(date, true);
+	}
+	
+	public void setDate(Date date, boolean updateModel) {
+		Date oldDate = this.date;
 		this.date = date;
 		if (date == null) {
 			((JSpinner.DateEditor) getEditor()).getFormat().applyPattern("");
 			((JSpinner.DateEditor) getEditor()).getTextField().setText("");
-		} else {
+		} else if (updateModel) {
 			if (dateFormatString != null) {
 				((JSpinner.DateEditor) getEditor()).getFormat().applyPattern(
 						dateFormatString);
 			}
 			((SpinnerDateModel) getModel()).setValue(date);
 		}
+		firePropertyChange("date", oldDate, date);
 	}
 
 	public void setDateFormatString(String dateFormatString) {
@@ -130,6 +142,49 @@ public class JSpinnerDateEditor extends JSpinner implements IDateEditor,
 			((JSpinner.DateEditor) getEditor()).getTextField().setBackground(
 					UIManager.getColor("TextField.inactiveBackground"));
 		}
+	}
+
+	/* (non-Javadoc)
+	 * @see com.toedter.calendar.IDateEditor#getMaxSelectableDate()
+	 */
+	public Date getMaxSelectableDate() {
+		return (Date) ((SpinnerDateModel) getModel()).getEnd();
+	}
+
+	/**
+	 * @see com.toedter.calendar.IDateEditor#getMinSelectableDate()
+	 */
+	public Date getMinSelectableDate() {
+		return (Date) ((SpinnerDateModel) getModel()).getStart();
+	}
+
+	/**
+	 * @see com.toedter.calendar.IDateEditor#setMaxSelectableDate(java.util.Date)
+	 */
+	public void setMaxSelectableDate(Date max) {
+		((SpinnerDateModel) getModel()).setEnd(max);
+	}
+
+	/**
+	 * @see com.toedter.calendar.IDateEditor#setMinSelectableDate(java.util.Date)
+	 */
+	public void setMinSelectableDate(Date min) {
+		((SpinnerDateModel) getModel()).setStart(min);
+	}
+
+	/**
+	 * @see com.toedter.calendar.IDateEditor#setSelectableDateRange(java.util.Date, java.util.Date)
+	 */
+	public void setSelectableDateRange(Date min, Date max) {
+		setMaxSelectableDate(max);
+		setMinSelectableDate(min);
+	}
+
+	/**
+	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+	 */
+	public void stateChanged(ChangeEvent e) {
+		setDate(((SpinnerDateModel) getModel()).getDate(), false);
 	}
 
 }
