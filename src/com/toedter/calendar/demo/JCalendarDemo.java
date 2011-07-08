@@ -24,6 +24,7 @@ package com.toedter.calendar.demo;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -71,6 +72,11 @@ import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.plaf.basic.BasicSplitPaneDivider;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 
+import com.jgoodies.looks.FontPolicies;
+import com.jgoodies.looks.FontPolicy;
+import com.jgoodies.looks.FontSet;
+import com.jgoodies.looks.FontSets;
+import com.jgoodies.looks.plastic.PlasticLookAndFeel;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JDayChooser;
@@ -85,8 +91,8 @@ import com.toedter.components.JTitlePanel;
  * as Java application.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 103 $
- * @version $LastChangedDate: 2006-06-04 14:57:02 +0200 (So, 04 Jun 2006) $
+ * @version $LastChangedRevision: 166 $
+ * @version $LastChangedDate: 2011-06-26 21:58:35 +0200 (So, 26 Jun 2011) $
  */
 public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 	private static final long serialVersionUID = 6739986412544494316L;
@@ -116,7 +122,8 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 		beans[5] = new JSpinField();
 
 		((JSpinField) beans[5]).adjustWidthToMaximumValue();
-		((JYearChooser) beans[4]).setMaximum(((JSpinField) beans[5]).getMaximum());
+		((JYearChooser) beans[4]).setMaximum(((JSpinField) beans[5])
+				.getMaximum());
 		((JYearChooser) beans[4]).adjustWidthToMaximumValue();
 
 		getContentPane().setLayout(new BorderLayout());
@@ -128,9 +135,10 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitPane.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 		splitPane.setDividerSize(4);
-		splitPane.setDividerLocation(190);
+		splitPane.setDividerLocation(240);
 
-		BasicSplitPaneDivider divider = ((BasicSplitPaneUI) splitPane.getUI()).getDivider();
+		BasicSplitPaneDivider divider = ((BasicSplitPaneUI) splitPane.getUI())
+				.getDivider();
 
 		if (divider != null) {
 			divider.setBorder(null);
@@ -143,11 +151,11 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 				"images/" + beans[0].getName() + "Color16.gif");
 		ImageIcon icon = new ImageIcon(iconURL);
 
-		propertyTitlePanel = new JTitlePanel("Properties", null, propertyPanel, BorderFactory
-				.createEmptyBorder(4, 4, 4, 4));
+		propertyTitlePanel = new JTitlePanel("Properties", null, propertyPanel,
+				BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
-		componentTitlePanel = new JTitlePanel("Component", icon, componentPanel, BorderFactory
-				.createEmptyBorder(4, 4, 0, 4));
+		componentTitlePanel = new JTitlePanel("Component", icon,
+				componentPanel, BorderFactory.createEmptyBorder(4, 4, 0, 4));
 
 		splitPane.setBottomComponent(propertyTitlePanel);
 		splitPane.setTopComponent(componentTitlePanel);
@@ -173,10 +181,24 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 				UIManager.installLookAndFeel("JGoodies Plastic 3D",
 						"com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
 			}
-			UIManager.setLookAndFeel("com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
+			String os = System.getProperty("os.name");
+			FontSet fontSet = null;
+			if (os.startsWith("Windows")) {
+				fontSet = FontSets.createDefaultFontSet(new Font(
+						"arial unicode MS", Font.PLAIN, 12));
+			} else {
+				fontSet = FontSets.createDefaultFontSet(new Font(
+						"arial unicode", Font.PLAIN, 12));				
+			}
+			FontPolicy fixedPolicy = FontPolicies.createFixedPolicy(fontSet);
+			PlasticLookAndFeel.setFontPolicy(fixedPolicy);
+
+			UIManager
+					.setLookAndFeel("com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
 		} catch (Throwable t) {
 			try {
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				UIManager.setLookAndFeel(UIManager
+						.getSystemLookAndFeelClassName());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -251,8 +273,9 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 				icon = new ImageIcon(iconURL);
 				menuItem = new JMenuItem(beans[i].getName(), icon);
 			} catch (Exception e) {
-				System.out.println("JCalendarDemo.createMenuBar(): " + e + " for URL: " + "images/"
-						+ beans[i].getName() + "Color16.gif");
+				System.out.println("JCalendarDemo.createMenuBar(): " + e
+						+ " for URL: " + "images/" + beans[i].getName()
+						+ "Color16.gif");
 				menuItem = new JMenuItem(beans[i].getName());
 			}
 
@@ -279,11 +302,13 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
 		for (int i = 0; i < lnfs.length; i++) {
 			if (!lnfs[i].getName().equals("CDE/Motif")) {
-				JRadioButtonMenuItem rbmi = new JRadioButtonMenuItem(lnfs[i].getName());
+				JRadioButtonMenuItem rbmi = new JRadioButtonMenuItem(
+						lnfs[i].getName());
 				lnfMenu.add(rbmi);
 
 				// preselect the current Look & feel
-				rbmi.setSelected(UIManager.getLookAndFeel().getName().equals(lnfs[i].getName()));
+				rbmi.setSelected(UIManager.getLookAndFeel().getName()
+						.equals(lnfs[i].getName()));
 
 				// store lool & feel info as client property
 				rbmi.putClientProperty("lnf name", lnfs[i]);
@@ -291,41 +316,46 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 				// create and add the item listener
 				rbmi.addItemListener(
 				// inlining
-						new ItemListener() {
-							public void itemStateChanged(ItemEvent ie) {
-								JRadioButtonMenuItem rbmi2 = (JRadioButtonMenuItem) ie.getSource();
+				new ItemListener() {
+					public void itemStateChanged(ItemEvent ie) {
+						JRadioButtonMenuItem rbmi2 = (JRadioButtonMenuItem) ie
+								.getSource();
 
-								if (rbmi2.isSelected()) {
-									// get the stored look & feel info
-									UIManager.LookAndFeelInfo info = (UIManager.LookAndFeelInfo) rbmi2
-											.getClientProperty("lnf name");
+						if (rbmi2.isSelected()) {
+							// get the stored look & feel info
+							UIManager.LookAndFeelInfo info = (UIManager.LookAndFeelInfo) rbmi2
+									.getClientProperty("lnf name");
 
-									try {
-										menuBar.putClientProperty("jgoodies.headerStyle", "Both");
-										UIManager.setLookAndFeel(info.getClassName());
+							try {
+								menuBar.putClientProperty(
+										"jgoodies.headerStyle", "Both");
+								UIManager.setLookAndFeel(info.getClassName());
 
-										// update the complete application's
-										// look & feel
-										SwingUtilities.updateComponentTreeUI(JCalendarDemo.this);
-										for (int i = 0; i < beans.length; i++) {
-											SwingUtilities.updateComponentTreeUI(beans[i]);
-										}
-										// set the split pane devider border to
-										// null
-										BasicSplitPaneDivider divider = ((BasicSplitPaneUI) splitPane
-												.getUI()).getDivider();
-
-										if (divider != null) {
-											divider.setBorder(null);
-										}
-									} catch (Exception e) {
-										e.printStackTrace();
-
-										System.err.println("Unable to set UI " + e.getMessage());
-									}
+								// update the complete application's
+								// look & feel
+								SwingUtilities
+										.updateComponentTreeUI(JCalendarDemo.this);
+								for (int i = 0; i < beans.length; i++) {
+									SwingUtilities
+											.updateComponentTreeUI(beans[i]);
 								}
+								// set the split pane devider border to
+								// null
+								BasicSplitPaneDivider divider = ((BasicSplitPaneUI) splitPane
+										.getUI()).getDivider();
+
+								if (divider != null) {
+									divider.setBorder(null);
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+
+								System.err.println("Unable to set UI "
+										+ e.getMessage());
 							}
-						});
+						}
+					}
+				});
 				lnfGroup.add(rbmi);
 			}
 		}
@@ -336,7 +366,8 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
 		JMenuItem aboutItem = helpMenu.add(new AboutAction(this));
 		aboutItem.setMnemonic('A');
-		aboutItem.setAccelerator(KeyStroke.getKeyStroke('A', java.awt.Event.CTRL_MASK));
+		aboutItem.setAccelerator(KeyStroke.getKeyStroke('A',
+				java.awt.Event.CTRL_MASK));
 
 		menuBar.add(helpMenu);
 
@@ -380,8 +411,9 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 		demo.init();
 		frame.getContentPane().add(demo);
 		frame.pack();
-		frame.setBounds(200, 200, (int) frame.getPreferredSize().getWidth() + 20, (int) frame
-				.getPreferredSize().getHeight() + 180);
+		frame.setBounds(200, 200,
+				(int) frame.getPreferredSize().getWidth() + 40, (int) frame
+						.getPreferredSize().getHeight() + 250);
 		frame.setVisible(true);
 	}
 
@@ -396,9 +428,10 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 			componentPanel.removeAll();
 			componentPanel.add(bean);
 
-			BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass(), bean.getClass()
-					.getSuperclass());
-			PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+			BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass(), bean
+					.getClass().getSuperclass());
+			PropertyDescriptor[] propertyDescriptors = beanInfo
+					.getPropertyDescriptors();
 
 			propertyPanel.removeAll();
 
@@ -410,18 +443,22 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
 			int count = 0;
 
-			String[] types = new String[] { "class java.util.Locale", "boolean", "int",
-					"class java.awt.Color", "class java.util.Date", "class java.lang.String" };
+			String[] types = new String[] { "class java.util.Locale",
+					"boolean", "int", "class java.awt.Color",
+					"class java.util.Date", "class java.lang.String" };
 
 			for (int t = 0; t < types.length; t++) {
 				for (int i = 0; i < propertyDescriptors.length; i++) {
 					if (propertyDescriptors[i].getWriteMethod() != null) {
-						String type = propertyDescriptors[i].getPropertyType().toString();
+						String type = propertyDescriptors[i].getPropertyType()
+								.toString();
 
 						final PropertyDescriptor propertyDescriptor = propertyDescriptors[i];
 						final JComponent currentBean = bean;
-						final Method readMethod = propertyDescriptor.getReadMethod();
-						final Method writeMethod = propertyDescriptor.getWriteMethod();
+						final Method readMethod = propertyDescriptor
+								.getReadMethod();
+						final Method writeMethod = propertyDescriptor
+								.getWriteMethod();
 
 						if (type.equals(types[t])
 								&& (((readMethod != null) && (writeMethod != null)) || ("class java.util.Locale"
@@ -430,58 +467,74 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 								boolean isSelected = false;
 
 								try {
-									Boolean booleanObj = ((Boolean) readMethod.invoke(bean, null));
+									Boolean booleanObj = ((Boolean) readMethod
+											.invoke(bean, (Object[]) null));
 									isSelected = booleanObj.booleanValue();
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
 
-								final JCheckBox checkBox = new JCheckBox("", isSelected);
+								final JCheckBox checkBox = new JCheckBox("",
+										isSelected);
 								checkBox.addActionListener(new ActionListener() {
-									public void actionPerformed(ActionEvent event) {
+									public void actionPerformed(
+											ActionEvent event) {
 										try {
 											if (checkBox.isSelected()) {
-												writeMethod.invoke(currentBean,
-														new Object[] { new Boolean(true) });
+												writeMethod
+														.invoke(currentBean,
+																new Object[] { new Boolean(
+																		true) });
 											} else {
-												writeMethod.invoke(currentBean,
-														new Object[] { new Boolean(false) });
+												writeMethod
+														.invoke(currentBean,
+																new Object[] { new Boolean(
+																		false) });
 											}
 										} catch (Exception e) {
 											e.printStackTrace();
 										}
 									}
 								});
-								addProperty(propertyDescriptors[i], checkBox, gridbag);
+								addProperty(propertyDescriptors[i], checkBox,
+										gridbag);
 								count += 1;
 							} else if ("int".equals(type)) {
 								JSpinField spinField = new JSpinField();
-								spinField.addPropertyChangeListener(new PropertyChangeListener() {
-									public void propertyChange(PropertyChangeEvent evt) {
-										try {
-											if (evt.getPropertyName().equals("value")) {
-												writeMethod.invoke(currentBean, new Object[] { evt
-														.getNewValue() });
+								spinField
+										.addPropertyChangeListener(new PropertyChangeListener() {
+											public void propertyChange(
+													PropertyChangeEvent evt) {
+												try {
+													if (evt.getPropertyName()
+															.equals("value")) {
+														writeMethod
+																.invoke(currentBean,
+																		new Object[] { evt
+																				.getNewValue() });
+													}
+												} catch (Exception e) {
+												}
 											}
-										} catch (Exception e) {
-										}
-									}
-								});
+										});
 
 								try {
-									Integer integerObj = ((Integer) readMethod.invoke(bean, null));
+									Integer integerObj = ((Integer) readMethod
+											.invoke(bean, (Object[]) null));
 									spinField.setValue(integerObj.intValue());
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
 
-								addProperty(propertyDescriptors[i], spinField, gridbag);
+								addProperty(propertyDescriptors[i], spinField,
+										gridbag);
 								count += 1;
 							} else if ("class java.lang.String".equals(type)) {
 								String string = "";
 
 								try {
-									string = ((String) readMethod.invoke(bean, null));
+									string = ((String) readMethod.invoke(bean,
+											(Object[]) null));
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
@@ -490,8 +543,10 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 								ActionListener actionListener = new ActionListener() {
 									public void actionPerformed(ActionEvent e) {
 										try {
-											writeMethod.invoke(currentBean, new Object[] { e
-													.getActionCommand() });
+											writeMethod
+													.invoke(currentBean,
+															new Object[] { e
+																	.getActionCommand() });
 										} catch (Exception ex) {
 										}
 									}
@@ -499,56 +554,76 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
 								textField.addActionListener(actionListener);
 
-								addProperty(propertyDescriptors[i], textField, gridbag);
+								addProperty(propertyDescriptors[i], textField,
+										gridbag);
 								count += 1;
 							} else if ("class java.util.Locale".equals(type)) {
-								JLocaleChooser localeChooser = new JLocaleChooser(bean);
-								localeChooser.setPreferredSize(new Dimension(200, localeChooser
-										.getPreferredSize().height));
-								addProperty(propertyDescriptors[i], localeChooser, gridbag);
+								JLocaleChooser localeChooser = new JLocaleChooser(
+										bean);
+								localeChooser
+										.setPreferredSize(new Dimension(
+												200,
+												localeChooser
+														.getPreferredSize().height));
+								addProperty(propertyDescriptors[i],
+										localeChooser, gridbag);
 								count += 1;
 							} else if ("class java.util.Date".equals(type)) {
 								Date date = null;
 
 								try {
-									date = ((Date) readMethod.invoke(bean, null));
+									date = ((Date) readMethod.invoke(bean,
+											(Object[]) null));
 								} catch (Exception e) {
 									e.printStackTrace();
 								}
 
-								JDateChooser dateChooser = new JDateChooser(date);
+								JDateChooser dateChooser = new JDateChooser(
+										date);
 
-								dateChooser.addPropertyChangeListener(new PropertyChangeListener() {
-									public void propertyChange(PropertyChangeEvent evt) {
-										try {
-											if (evt.getPropertyName().equals("date")) {
-												writeMethod.invoke(currentBean, new Object[] { evt
-														.getNewValue() });
+								dateChooser
+										.addPropertyChangeListener(new PropertyChangeListener() {
+											public void propertyChange(
+													PropertyChangeEvent evt) {
+												try {
+													if (evt.getPropertyName()
+															.equals("date")) {
+														writeMethod
+																.invoke(currentBean,
+																		new Object[] { evt
+																				.getNewValue() });
+													}
+												} catch (Exception e) {
+												}
 											}
-										} catch (Exception e) {
-										}
-									}
-								});
+										});
 
-								addProperty(propertyDescriptors[i], dateChooser, gridbag);
+								addProperty(propertyDescriptors[i],
+										dateChooser, gridbag);
 								count += 1;
 							} else if ("class java.awt.Color".equals(type)) {
 								final JButton button = new JButton();
 
 								try {
-									final Color colorObj = ((Color) readMethod.invoke(bean, null));
+									final Color colorObj = ((Color) readMethod
+											.invoke(bean, (Object[]) null));
 									button.setText("...");
 									button.setBackground(colorObj);
 
 									ActionListener actionListener = new ActionListener() {
-										public void actionPerformed(ActionEvent e) {
-											Color newColor = JColorChooser.showDialog(
-													JCalendarDemo.this, "Choose Color", colorObj);
+										public void actionPerformed(
+												ActionEvent e) {
+											Color newColor = JColorChooser
+													.showDialog(
+															JCalendarDemo.this,
+															"Choose Color",
+															colorObj);
 											button.setBackground(newColor);
 
 											try {
-												writeMethod.invoke(currentBean,
-														new Object[] { newColor });
+												writeMethod
+														.invoke(currentBean,
+																new Object[] { newColor });
 											} catch (Exception e1) {
 												e1.printStackTrace();
 											}
@@ -560,7 +635,8 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 									e.printStackTrace();
 								}
 
-								addProperty(propertyDescriptors[i], button, gridbag);
+								addProperty(propertyDescriptors[i], button,
+										gridbag);
 								count += 1;
 							}
 						}
@@ -568,7 +644,8 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 				}
 			}
 
-			URL iconURL = bean.getClass().getResource("images/" + bean.getName() + "Color16.gif");
+			URL iconURL = bean.getClass().getResource(
+					"images/" + bean.getName() + "Color16.gif");
 			ImageIcon icon = new ImageIcon(iconURL);
 
 			componentTitlePanel.setTitle(bean.getName(), icon);
@@ -581,8 +658,8 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 		}
 	}
 
-	private void addProperty(PropertyDescriptor propertyDescriptor, JComponent editor,
-			GridBagLayout grid) {
+	private void addProperty(PropertyDescriptor propertyDescriptor,
+			JComponent editor, GridBagLayout grid) {
 		String text = propertyDescriptor.getDisplayName();
 		String newText = "";
 
@@ -628,7 +705,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 	 */
 	class AboutAction extends AbstractAction {
 		private static final long serialVersionUID = -5204865941545323214L;
-		private JCalendarDemo demo;
+		private final JCalendarDemo demo;
 
 		/**
 		 * Constructor for the AboutAction object
@@ -651,7 +728,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 			JOptionPane
 					.showMessageDialog(
 							demo,
-							"JCalendar Demo\nVersion 1.3.2\n\nKai Toedter\nkai@toedter.com\nwww.toedter.com",
+							"JCalendar Demo\nVersion 1.4\n\nKai Toedter\nkai@toedter.com\nwww.toedter.com",
 							"About...", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}

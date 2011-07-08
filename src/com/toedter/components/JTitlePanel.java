@@ -38,8 +38,8 @@ import javax.swing.border.Border;
  * A simple JPanel with a border and a title
  *
  * @author Kai Toedter
- * @version $LastChangedRevision: 85 $
- * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
+ * @version $LastChangedRevision: 139 $
+ * @version $LastChangedDate: 2011-06-04 19:50:51 +0200 (Sa, 04 Jun 2011) $
  */
 public class JTitlePanel extends JPanel {
 	private static final long serialVersionUID = 9104873267039717087L;
@@ -100,8 +100,8 @@ public class JTitlePanel extends JPanel {
 
             if (isOpaque()) {
                 // Color controlColor = UIManager.getColor("control");
-                // Color controlColor = new Color(252, 198, 82);
-                Color controlColor = new Color(99, 153, 255);
+                Color controlColor = new Color(165, 201, 215);
+                // Color controlColor = new Color(99, 153, 255);
                 int width = getWidth();
                 int height = getHeight();
 

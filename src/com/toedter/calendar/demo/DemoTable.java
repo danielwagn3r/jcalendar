@@ -1,6 +1,6 @@
 /*
  *  DemoTable.java  - A table to demo JDateChooser cell editors.
-  *  Copyright (C) 2006 Kai Toedter
+ *  Copyright (C) 2006 Kai Toedter
  *  kai@toedter.com
  *  www.toedter.com
  *
@@ -36,8 +36,8 @@ import com.toedter.calendar.JDateChooserCellEditor;
  * A demonstration table with JDateChooserCellEditors.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 85 $
- * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
+ * @version $LastChangedRevision: 119 $
+ * @version $LastChangedDate: 2009-05-04 17:47:56 +0200 (Mo, 04 Mai 2009) $
  */
 public class DemoTable extends JPanel {
 	private static final long serialVersionUID = -2823838920746867592L;
@@ -50,7 +50,7 @@ public class DemoTable extends JPanel {
 		JTable table = new JTable(new DemoTableModel());
 		table.setPreferredScrollableViewportSize(new Dimension(180, 32));
 		table.setDefaultEditor(Date.class, new JDateChooserCellEditor());
-		
+
 		// Create the scroll pane and add the table to it.
 		JScrollPane scrollPane = new JScrollPane(table);
 
@@ -61,12 +61,10 @@ public class DemoTable extends JPanel {
 	class DemoTableModel extends AbstractTableModel {
 		private static final long serialVersionUID = 3283465559187131559L;
 
-		private String[] columnNames = { "Empty Date", "Date set" };
+		private final String[] columnNames = { "Empty Date", "Date set" };
 
-		private Object[][] data = { 
-				{ null, new Date() },
-				{ null, new Date() }
-	    };
+		private final Object[][] data = { { null, new Date() },
+				{ null, new Date() } };
 
 		public int getColumnCount() {
 			return columnNames.length;
@@ -97,7 +95,7 @@ public class DemoTable extends JPanel {
 		 * Don't need to implement this method unless your table's editable.
 		 */
 		public boolean isCellEditable(int row, int col) {
-				return true;
+			return true;
 		}
 
 		/*
