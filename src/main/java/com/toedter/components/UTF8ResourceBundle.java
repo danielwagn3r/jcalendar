@@ -30,9 +30,9 @@ import java.util.ResourceBundle;
 /**
  * This class is a hack to read UTF-8 encoded property files. The implementation
  * is based on http://www.thoughtsabout.net/blog/archives/000044.html
- *
+ * 
  * @author Kai Toedter
- *
+ * 
  */
 public abstract class UTF8ResourceBundle {
 

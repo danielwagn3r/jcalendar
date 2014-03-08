@@ -23,171 +23,173 @@ import javax.swing.event.ChangeListener;
  * @version $LastChangedDate: 2011-06-06 20:36:53 +0200 (Mon, 06 Jun 2011) $
  */
 public class JSpinnerDateEditor extends JSpinner implements IDateEditor,
-		FocusListener, ChangeListener {
+                FocusListener, ChangeListener {
 
-	private static final long serialVersionUID = 5692204052306085316L;
+    private static final long  serialVersionUID = 5692204052306085316L;
 
-	protected Date date;
+    protected Date             date;
 
-	protected String dateFormatString;
+    protected String           dateFormatString;
 
-	protected SimpleDateFormat dateFormatter;
+    protected SimpleDateFormat dateFormatter;
 
-	public JSpinnerDateEditor() {
-		super(new SpinnerDateModel());
-		dateFormatter = (SimpleDateFormat) DateFormat
-				.getDateInstance(DateFormat.MEDIUM);
-		((JSpinner.DateEditor) getEditor()).getTextField().addFocusListener(
-				this);
-		DateUtil dateUtil = new DateUtil();
-		setMinSelectableDate(dateUtil.getMinSelectableDate());
-		setMaxSelectableDate(dateUtil.getMaxSelectableDate());
-		((JSpinner.DateEditor)getEditor()).getTextField().setFocusLostBehavior(JFormattedTextField.PERSIST);
-		addChangeListener(this);
-	}
+    public JSpinnerDateEditor() {
+        super(new SpinnerDateModel());
+        dateFormatter = (SimpleDateFormat) DateFormat
+                        .getDateInstance(DateFormat.MEDIUM);
+        ((JSpinner.DateEditor) getEditor()).getTextField().addFocusListener(
+                        this);
+        DateUtil dateUtil = new DateUtil();
+        setMinSelectableDate(dateUtil.getMinSelectableDate());
+        setMaxSelectableDate(dateUtil.getMaxSelectableDate());
+        ((JSpinner.DateEditor) getEditor()).getTextField().setFocusLostBehavior(JFormattedTextField.PERSIST);
+        addChangeListener(this);
+    }
 
-	public Date getDate() {
-		if (date == null) {
-			return null;
-		}
-		return ((SpinnerDateModel) getModel()).getDate();
-	}
+    public Date getDate() {
+        if (date == null) {
+            return null;
+        }
+        return ((SpinnerDateModel) getModel()).getDate();
+    }
 
-	public void setDate(Date date) {
-		setDate(date, true);
-	}
-	
-	public void setDate(Date date, boolean updateModel) {
-		Date oldDate = this.date;
-		this.date = date;
-		if (date == null) {
-			((JSpinner.DateEditor) getEditor()).getFormat().applyPattern("");
-			((JSpinner.DateEditor) getEditor()).getTextField().setText("");
-		} else if (updateModel) {
-			if (dateFormatString != null) {
-				((JSpinner.DateEditor) getEditor()).getFormat().applyPattern(
-						dateFormatString);
-			}
-			((SpinnerDateModel) getModel()).setValue(date);
-		}
-		firePropertyChange("date", oldDate, date);
-	}
+    public void setDate(Date date) {
+        setDate(date, true);
+    }
 
-	public void setDateFormatString(String dateFormatString) {
-		try {
-			dateFormatter.applyPattern(dateFormatString);
-		} catch (RuntimeException e) {
-			dateFormatter = (SimpleDateFormat) DateFormat
-					.getDateInstance(DateFormat.MEDIUM);
-			dateFormatter.setLenient(false);
-		}
-		this.dateFormatString = dateFormatter.toPattern();
-		setToolTipText(this.dateFormatString);
+    public void setDate(Date date, boolean updateModel) {
+        Date oldDate = this.date;
+        this.date = date;
+        if (date == null) {
+            ((JSpinner.DateEditor) getEditor()).getFormat().applyPattern("");
+            ((JSpinner.DateEditor) getEditor()).getTextField().setText("");
+        } else if (updateModel) {
+            if (dateFormatString != null) {
+                ((JSpinner.DateEditor) getEditor()).getFormat().applyPattern(
+                                dateFormatString);
+            }
+            ((SpinnerDateModel) getModel()).setValue(date);
+        }
+        firePropertyChange("date", oldDate, date);
+    }
 
-		if (date != null) {
-			((JSpinner.DateEditor) getEditor()).getFormat().applyPattern(
-					this.dateFormatString);
-		} else {
-			((JSpinner.DateEditor) getEditor()).getFormat().applyPattern("");
-		}
+    public void setDateFormatString(String dateFormatString) {
+        try {
+            dateFormatter.applyPattern(dateFormatString);
+        } catch (RuntimeException e) {
+            dateFormatter = (SimpleDateFormat) DateFormat
+                            .getDateInstance(DateFormat.MEDIUM);
+            dateFormatter.setLenient(false);
+        }
+        this.dateFormatString = dateFormatter.toPattern();
+        setToolTipText(this.dateFormatString);
 
-		if (date != null) {
-			String text = dateFormatter.format(date);
-			((JSpinner.DateEditor) getEditor()).getTextField().setText(text);
-		}
-	}
+        if (date != null) {
+            ((JSpinner.DateEditor) getEditor()).getFormat().applyPattern(
+                            this.dateFormatString);
+        } else {
+            ((JSpinner.DateEditor) getEditor()).getFormat().applyPattern("");
+        }
 
-	public String getDateFormatString() {
-		return dateFormatString;
-	}
+        if (date != null) {
+            String text = dateFormatter.format(date);
+            ((JSpinner.DateEditor) getEditor()).getTextField().setText(text);
+        }
+    }
 
-	public JComponent getUiComponent() {
-		return this;
-	}
+    public String getDateFormatString() {
+        return dateFormatString;
+    }
 
-	public void setLocale(Locale locale) {
-		super.setLocale(locale);
-		dateFormatter = (SimpleDateFormat) DateFormat.getDateInstance(
-				DateFormat.MEDIUM, locale);
-		setEditor(new JSpinner.DateEditor(this, dateFormatter.toPattern()));
-		setDateFormatString(dateFormatter.toPattern());
-	}
+    public JComponent getUiComponent() {
+        return this;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
-	 */
-	public void focusLost(FocusEvent focusEvent) {
-		String text = ((JSpinner.DateEditor) getEditor()).getTextField()
-				.getText();
-		if (text.length() == 0) {
-			setDate(null);
-		}
-	}
+    public void setLocale(Locale locale) {
+        super.setLocale(locale);
+        dateFormatter = (SimpleDateFormat) DateFormat.getDateInstance(
+                        DateFormat.MEDIUM, locale);
+        setEditor(new JSpinner.DateEditor(this, dateFormatter.toPattern()));
+        setDateFormatString(dateFormatter.toPattern());
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
-	 */
-	public void focusGained(FocusEvent e) {
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.awt.event.FocusListener#focusLost(java.awt.event.FocusEvent)
+     */
+    public void focusLost(FocusEvent focusEvent) {
+        String text = ((JSpinner.DateEditor) getEditor()).getTextField()
+                        .getText();
+        if (text.length() == 0) {
+            setDate(null);
+        }
+    }
 
-	/**
-	 * Enables and disabled the compoment. It also fixes the background bug
-	 * 4991597 and sets the background explicitely to a
-	 * TextField.inactiveBackground.
-	 */
-	public void setEnabled(boolean b) {
-		super.setEnabled(b);
-		if (!b) {
-			((JSpinner.DateEditor) getEditor()).getTextField().setBackground(
-					UIManager.getColor("TextField.inactiveBackground"));
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+     */
+    public void focusGained(FocusEvent e) {
+    }
 
-	/* (non-Javadoc)
-	 * @see com.toedter.calendar.IDateEditor#getMaxSelectableDate()
-	 */
-	public Date getMaxSelectableDate() {
-		return (Date) ((SpinnerDateModel) getModel()).getEnd();
-	}
+    /**
+     * Enables and disabled the compoment. It also fixes the background bug
+     * 4991597 and sets the background explicitely to a
+     * TextField.inactiveBackground.
+     */
+    public void setEnabled(boolean b) {
+        super.setEnabled(b);
+        if (!b) {
+            ((JSpinner.DateEditor) getEditor()).getTextField().setBackground(
+                            UIManager.getColor("TextField.inactiveBackground"));
+        }
+    }
 
-	/**
-	 * @see com.toedter.calendar.IDateEditor#getMinSelectableDate()
-	 */
-	public Date getMinSelectableDate() {
-		return (Date) ((SpinnerDateModel) getModel()).getStart();
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see com.toedter.calendar.IDateEditor#getMaxSelectableDate()
+     */
+    public Date getMaxSelectableDate() {
+        return (Date) ((SpinnerDateModel) getModel()).getEnd();
+    }
 
-	/**
-	 * @see com.toedter.calendar.IDateEditor#setMaxSelectableDate(java.util.Date)
-	 */
-	public void setMaxSelectableDate(Date max) {
-		((SpinnerDateModel) getModel()).setEnd(max);
-	}
+    /**
+     * @see com.toedter.calendar.IDateEditor#getMinSelectableDate()
+     */
+    public Date getMinSelectableDate() {
+        return (Date) ((SpinnerDateModel) getModel()).getStart();
+    }
 
-	/**
-	 * @see com.toedter.calendar.IDateEditor#setMinSelectableDate(java.util.Date)
-	 */
-	public void setMinSelectableDate(Date min) {
-		((SpinnerDateModel) getModel()).setStart(min);
-	}
+    /**
+     * @see com.toedter.calendar.IDateEditor#setMaxSelectableDate(java.util.Date)
+     */
+    public void setMaxSelectableDate(Date max) {
+        ((SpinnerDateModel) getModel()).setEnd(max);
+    }
 
-	/**
-	 * @see com.toedter.calendar.IDateEditor#setSelectableDateRange(java.util.Date, java.util.Date)
-	 */
-	public void setSelectableDateRange(Date min, Date max) {
-		setMaxSelectableDate(max);
-		setMinSelectableDate(min);
-	}
+    /**
+     * @see com.toedter.calendar.IDateEditor#setMinSelectableDate(java.util.Date)
+     */
+    public void setMinSelectableDate(Date min) {
+        ((SpinnerDateModel) getModel()).setStart(min);
+    }
 
-	/**
-	 * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
-	 */
-	public void stateChanged(ChangeEvent e) {
-		setDate(((SpinnerDateModel) getModel()).getDate(), false);
-	}
+    /**
+     * @see com.toedter.calendar.IDateEditor#setSelectableDateRange(java.util.Date, java.util.Date)
+     */
+    public void setSelectableDateRange(Date min, Date max) {
+        setMaxSelectableDate(max);
+        setMinSelectableDate(min);
+    }
+
+    /**
+     * @see javax.swing.event.ChangeListener#stateChanged(javax.swing.event.ChangeEvent)
+     */
+    public void stateChanged(ChangeEvent e) {
+        setDate(((SpinnerDateModel) getModel()).getDate(), false);
+    }
 
 }

@@ -48,62 +48,62 @@ import javax.swing.UIManager;
 
 /**
  * JDayChooser is a bean for choosing a day.
- *
+ * 
  * @author Kai Toedter
  * @version $LastChangedRevision: 147 $
  * @version $LastChangedDate: 2011-06-06 20:36:53 +0200 (Mon, 06 Jun 2011) $
  */
 public class JDayChooser extends JPanel implements ActionListener, KeyListener,
-        FocusListener {
-    private static final long serialVersionUID = 5876398337018781820L;
+                FocusListener {
+    private static final long      serialVersionUID            = 5876398337018781820L;
 
-    protected JButton[] days;
+    protected JButton[]            days;
 
-    protected JButton[] weeks;
+    protected JButton[]            weeks;
 
-    protected JButton selectedDay;
+    protected JButton              selectedDay;
 
-    protected JPanel weekPanel;
+    protected JPanel               weekPanel;
 
-    protected JPanel dayPanel;
+    protected JPanel               dayPanel;
 
-    protected int day;
+    protected int                  day;
 
-    protected Color oldDayBackgroundColor;
+    protected Color                oldDayBackgroundColor;
 
-    protected Color selectedColor;
+    protected Color                selectedColor;
 
-    protected Color sundayForeground;
+    protected Color                sundayForeground;
 
-    protected Color weekdayForeground;
+    protected Color                weekdayForeground;
 
-    protected Color decorationBackgroundColor;
+    protected Color                decorationBackgroundColor;
 
-    protected String[] dayNames;
+    protected String[]             dayNames;
 
-    protected Calendar calendar;
+    protected Calendar             calendar;
 
-    protected Calendar today;
+    protected Calendar             today;
 
-    protected Locale locale;
+    protected Locale               locale;
 
-    protected boolean initialized;
+    protected boolean              initialized;
 
-    protected boolean weekOfYearVisible;
+    protected boolean              weekOfYearVisible;
 
-    protected boolean decorationBackgroundVisible = true;
+    protected boolean              decorationBackgroundVisible = true;
 
-    protected boolean decorationBordersVisible;
+    protected boolean              decorationBordersVisible;
 
-    protected boolean dayBordersVisible;
+    protected boolean              dayBordersVisible;
 
-    private boolean alwaysFireDayProperty;
+    private boolean                alwaysFireDayProperty;
 
-    protected int maxDayCharacters;
+    protected int                  maxDayCharacters;
 
     protected List<IDateEvaluator> dateEvaluators;
 
-    protected MinMaxDateEvaluator minMaxDateEvaluator;
+    protected MinMaxDateEvaluator  minMaxDateEvaluator;
 
     /**
      * Default JDayChooser constructor.
@@ -114,7 +114,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * JDayChooser constructor.
-     *
+     * 
      * @param weekOfYearVisible
      *            true, if the weeks of a year shall be shown
      */
@@ -160,7 +160,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
                         public void paint(Graphics g) {
                             if ("Windows".equals(UIManager.getLookAndFeel()
-                                    .getID())) {
+                                            .getID())) {
                                 // this is a hack to get the background painted
                                 // when using Windows Look & Feel
                                 if (selectedDay == this) {
@@ -243,7 +243,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
             if (maxDayCharacters > 0 && maxDayCharacters < 5) {
                 if (dayNames[day].length() >= maxDayCharacters) {
                     dayNames[day] = dayNames[day]
-                            .substring(0, maxDayCharacters);
+                                    .substring(0, maxDayCharacters);
                 }
             }
 
@@ -343,9 +343,9 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
             days[i + n + 7].setVisible(true);
 
             if ((tmpCalendar.get(Calendar.DAY_OF_YEAR) == today
-                    .get(Calendar.DAY_OF_YEAR))
-                    && (tmpCalendar.get(Calendar.YEAR) == today
-                            .get(Calendar.YEAR))) {
+                            .get(Calendar.DAY_OF_YEAR))
+                            && (tmpCalendar.get(Calendar.YEAR) == today
+                                            .get(Calendar.YEAR))) {
                 days[i + n + 7].setForeground(sundayForeground);
             } else {
                 days[i + n + 7].setForeground(foregroundColor);
@@ -364,17 +364,17 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
                 IDateEvaluator dateEvaluator = (IDateEvaluator) iterator.next();
                 if (dateEvaluator.isSpecial(day)) {
                     days[i + n + 7].setForeground(dateEvaluator
-                            .getSpecialForegroundColor());
+                                    .getSpecialForegroundColor());
                     days[i + n + 7].setBackground(dateEvaluator
-                            .getSpecialBackroundColor());
+                                    .getSpecialBackroundColor());
                     days[i + n + 7].setToolTipText(dateEvaluator.getSpecialTooltip());
                     days[i + n + 7].setEnabled(true);
                 }
-                if (dateEvaluator.isInvalid(day)){
+                if (dateEvaluator.isInvalid(day)) {
                     days[i + n + 7].setForeground(dateEvaluator
-                            .getInvalidForegroundColor());
+                                    .getInvalidForegroundColor());
                     days[i + n + 7].setBackground(dateEvaluator
-                            .getInvalidBackroundColor());
+                                    .getInvalidBackroundColor());
                     days[i + n + 7].setToolTipText(dateEvaluator.getInvalidTooltip());
                     days[i + n + 7].setEnabled(false);
                 }
@@ -395,9 +395,9 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Returns the locale.
-     *
+     * 
      * @return the locale value
-     *
+     * 
      * @see #setLocale
      */
     public Locale getLocale() {
@@ -406,10 +406,10 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Sets the locale.
-     *
+     * 
      * @param locale
      *            the new locale value
-     *
+     * 
      * @see #getLocale
      */
     public void setLocale(Locale locale) {
@@ -424,10 +424,10 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Sets the day. This is a bound property.
-     *
+     * 
      * @param d
      *            the day
-     *
+     * 
      * @see #getDay
      */
     public void setDay(int d) {
@@ -470,7 +470,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * this is needed for JDateChooser.
-     *
+     * 
      * @param alwaysFire
      *            true, if day property shall be fired every time a day is
      *            chosen.
@@ -481,9 +481,9 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Returns the selected day.
-     *
+     * 
      * @return the day value
-     *
+     * 
      * @see #setDay
      */
     public int getDay() {
@@ -493,7 +493,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * Sets a specific month. This is needed for correct graphical
      * representation of the days.
-     *
+     * 
      * @param month
      *            the new month
      */
@@ -511,7 +511,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * Sets a specific year. This is needed for correct graphical representation
      * of the days.
-     *
+     * 
      * @param year
      *            the new year
      */
@@ -523,7 +523,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * Sets a specific calendar. This is needed for correct graphical
      * representation of the days.
-     *
+     * 
      * @param calendar
      *            the new calendar
      */
@@ -534,7 +534,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Sets the font property.
-     *
+     * 
      * @param font
      *            the new font
      */
@@ -553,7 +553,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Sets the foregroundColor color.
-     *
+     * 
      * @param foreground
      *            the new foregroundColor
      */
@@ -571,7 +571,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * JDayChooser is the ActionListener for all day buttons.
-     *
+     * 
      * @param e
      *            the ActionEvent
      */
@@ -585,7 +585,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * JDayChooser is the FocusListener for all day buttons. (Added by Thomas
      * Schaefer)
-     *
+     * 
      * @param e
      *            the FocusEvent
      */
@@ -607,7 +607,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Does nothing.
-     *
+     * 
      * @param e
      *            the FocusEvent
      */
@@ -617,27 +617,27 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * JDayChooser is the KeyListener for all day buttons. (Added by Thomas
      * Schaefer and modified by Austin Moore)
-     *
+     * 
      * @param e
      *            the KeyEvent
      */
     public void keyPressed(KeyEvent e) {
         int offset = (e.getKeyCode() == KeyEvent.VK_UP) ? (-7) : ((e
-                .getKeyCode() == KeyEvent.VK_DOWN) ? (+7)
-                : ((e.getKeyCode() == KeyEvent.VK_LEFT) ? (-1) : ((e
-                        .getKeyCode() == KeyEvent.VK_RIGHT) ? (+1) : 0)));
+                        .getKeyCode() == KeyEvent.VK_DOWN) ? (+7)
+                        : ((e.getKeyCode() == KeyEvent.VK_LEFT) ? (-1) : ((e
+                                        .getKeyCode() == KeyEvent.VK_RIGHT) ? (+1) : 0)));
 
         int newDay = getDay() + offset;
 
         if ((newDay >= 1)
-                && (newDay <= calendar.getMaximum(Calendar.DAY_OF_MONTH))) {
+                        && (newDay <= calendar.getMaximum(Calendar.DAY_OF_MONTH))) {
             setDay(newDay);
         }
     }
 
     /**
      * Does nothing.
-     *
+     * 
      * @param e
      *            the KeyEvent
      */
@@ -646,7 +646,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Does nothing.
-     *
+     * 
      * @param e
      *            the KeyEvent
      */
@@ -655,7 +655,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Enable or disable the JDayChooser.
-     *
+     * 
      * @param enabled
      *            The new enabled value
      */
@@ -678,7 +678,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * In some Countries it is often usefull to know in which week of the year a
      * date is.
-     *
+     * 
      * @return boolean true, if the weeks of the year is shown
      */
     public boolean isWeekOfYearVisible() {
@@ -688,7 +688,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * In some Countries it is often usefull to know in which week of the year a
      * date is.
-     *
+     * 
      * @param weekOfYearVisible
      *            true, if the weeks of the year shall be shown
      */
@@ -708,7 +708,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Returns the day panel.
-     *
+     * 
      * @return the day panel
      */
     public JPanel getDayPanel() {
@@ -717,7 +717,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Returns the color of the decoration (day names and weeks).
-     *
+     * 
      * @return the color of the decoration (day names and weeks).
      */
     public Color getDecorationBackgroundColor() {
@@ -726,7 +726,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Sets the background of days and weeks of year buttons.
-     *
+     * 
      * @param decorationBackgroundColor
      *            The background to set
      */
@@ -748,7 +748,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Returns the Sunday foreground.
-     *
+     * 
      * @return Color the Sunday foreground.
      */
     public Color getSundayForeground() {
@@ -757,7 +757,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Returns the weekday foreground.
-     *
+     * 
      * @return Color the weekday foreground.
      */
     public Color getWeekdayForeground() {
@@ -766,7 +766,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Sets the Sunday foreground.
-     *
+     * 
      * @param sundayForeground
      *            The sundayForeground to set
      */
@@ -778,7 +778,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Sets the weekday foreground.
-     *
+     * 
      * @param weekdayForeground
      *            The weekdayForeground to set
      */
@@ -800,7 +800,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * The decoration background is the background color of the day titles and
      * the weeks of the year.
-     *
+     * 
      * @return Returns true, if the decoration background is painted.
      */
     public boolean isDecorationBackgroundVisible() {
@@ -810,12 +810,12 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * The decoration background is the background color of the day titles and
      * the weeks of the year.
-     *
+     * 
      * @param decorationBackgroundVisible
      *            true, if the decoration background shall be painted.
      */
     public void setDecorationBackgroundVisible(
-            boolean decorationBackgroundVisible) {
+                    boolean decorationBackgroundVisible) {
         this.decorationBackgroundVisible = decorationBackgroundVisible;
         initDecorations();
     }
@@ -823,7 +823,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * The decoration border is the button border of the day titles and the
      * weeks of the year.
-     *
+     * 
      * @return Returns true, if the decoration border is painted.
      */
     public boolean isDecorationBordersVisible() {
@@ -837,7 +837,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * The decoration border is the button border of the day titles and the
      * weeks of the year.
-     *
+     * 
      * @param decorationBordersVisible
      *            true, if the decoration border shall be painted.
      */
@@ -886,7 +886,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * Sets a valid date range for selectable dates. If max is before min, the
      * default range with no limitation is set.
-     *
+     * 
      * @param min
      *            the minimum selectable date or null (then the minimum date is
      *            set to 01\01\0001)
@@ -903,10 +903,10 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * Sets the maximum selectable date. If null, the date 01\01\9999 will be
      * set instead.
-     *
+     * 
      * @param max
      *            the maximum selectable date
-     *
+     * 
      * @return the maximum selectable date
      */
     public Date setMaxSelectableDate(Date max) {
@@ -918,10 +918,10 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * Sets the minimum selectable date. If null, the date 01\01\0001 will be
      * set instead.
-     *
+     * 
      * @param min
      *            the minimum selectable date
-     *
+     * 
      * @return the minimum selectable date
      */
     public Date setMinSelectableDate(Date min) {
@@ -932,7 +932,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Gets the maximum selectable date.
-     *
+     * 
      * @return the maximum selectable date
      */
     public Date getMaxSelectableDate() {
@@ -941,7 +941,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Gets the minimum selectable date.
-     *
+     * 
      * @return the minimum selectable date
      */
     public Date getMinSelectableDate() {
@@ -951,7 +951,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
     /**
      * Gets the maximum number of characters of a day name or 0. If 0 is
      * returned, dateFormatSymbols.getShortWeekdays() will be used.
-     *
+     * 
      * @return the maximum number of characters of a day name or 0.
      */
     public int getMaxDayCharacters() {
@@ -963,7 +963,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
      * values are 0-4. If set to 0, dateFormatSymbols.getShortWeekdays() will be
      * used, otherwise theses strings will be reduced to the maximum number of
      * characters.
-     *
+     * 
      * @param maxDayCharacters
      *            the maximum number of characters of a day name.
      */
@@ -984,7 +984,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
 
     /**
      * Creates a JFrame with a JDayChooser inside and can be used for testing.
-     *
+     * 
      * @param s
      *            The command line arguments
      */

@@ -33,25 +33,27 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-
 /**
  * A simple JPanel with a border and a title
- *
+ * 
  * @author Kai Toedter
  * @version $LastChangedRevision: 139 $
  * @version $LastChangedDate: 2011-06-04 19:50:51 +0200 (Sat, 04 Jun 2011) $
  */
 public class JTitlePanel extends JPanel {
-	private static final long serialVersionUID = 9104873267039717087L;
-	protected JPanel northPanel;
-    protected JLabel label;
-    
+    private static final long serialVersionUID = 9104873267039717087L;
+    protected JPanel          northPanel;
+    protected JLabel          label;
+
     /**
      * Constructs a titled panel.
-     *
-     * @param title the title
-     * @param content the JComponent that contains the content
-     * @param outerBorder the outer border
+     * 
+     * @param title
+     *            the title
+     * @param content
+     *            the JComponent that contains the content
+     * @param outerBorder
+     *            the outer border
      */
     public JTitlePanel(String title, Icon icon, JComponent content, Border outerBorder) {
         setLayout(new BorderLayout());
@@ -63,15 +65,15 @@ public class JTitlePanel extends JPanel {
         titlePanel.setLayout(new BorderLayout());
         titlePanel.add(label, BorderLayout.WEST);
         int borderOffset = 2;
-        if(icon == null) {
-        	borderOffset += 1;
+        if (icon == null) {
+            borderOffset += 1;
         }
         titlePanel.setBorder(BorderFactory.createEmptyBorder(borderOffset, 4, borderOffset, 1));
         add(titlePanel, BorderLayout.NORTH);
-        
+
         JPanel northPanel = new JPanel();
         northPanel.setLayout(new BorderLayout());
-        northPanel.add(content,BorderLayout.NORTH);
+        northPanel.add(content, BorderLayout.NORTH);
         northPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
         add(northPanel, BorderLayout.CENTER);
 
@@ -79,19 +81,19 @@ public class JTitlePanel extends JPanel {
             setBorder(BorderFactory.createLineBorder(Color.GRAY));
         } else {
             setBorder(BorderFactory.createCompoundBorder(outerBorder,
-                    BorderFactory.createLineBorder(Color.GRAY)));
+                            BorderFactory.createLineBorder(Color.GRAY)));
         }
     }
-  
-    public void setTitle(String label, Icon icon) {
-    	this.label.setText(label);
-    	this.label.setIcon(icon);
-    }
-    
-    private static class GradientPanel extends JPanel {
-		private static final long serialVersionUID = -6385751027379193053L;
 
-		private GradientPanel(Color background) {
+    public void setTitle(String label, Icon icon) {
+        this.label.setText(label);
+        this.label.setIcon(icon);
+    }
+
+    private static class GradientPanel extends JPanel {
+        private static final long serialVersionUID = -6385751027379193053L;
+
+        private GradientPanel(Color background) {
             setBackground(background);
         }
 
@@ -108,7 +110,7 @@ public class JTitlePanel extends JPanel {
                 Graphics2D g2 = (Graphics2D) g;
                 Paint oldPaint = g2.getPaint();
                 g2.setPaint(new GradientPaint(0, 0, getBackground(), width, 0,
-                        controlColor));
+                                controlColor));
                 g2.fillRect(0, 0, width, height);
                 g2.setPaint(oldPaint);
             }
