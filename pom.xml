@@ -37,7 +37,7 @@
         <dependency>
             <groupId>com.jgoodies</groupId>
             <artifactId>jgoodies-looks</artifactId>
-            <version>2.5.3</version>
+            <version>2.6.0</version>
         </dependency>
     </dependencies>
 
@@ -76,10 +76,12 @@
                             </addDefaultSpecificationEntries>
                             <addExtensions>true</addExtensions>
                             <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.toedter.calendar.demo.JCalendarDemo</mainClass>
                         </manifest>
                         <manifestEntries>
                             <url>${project.url}</url>
                         </manifestEntries>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
             </plugin>
