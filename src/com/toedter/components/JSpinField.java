@@ -18,6 +18,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+
 package com.toedter.components;
 
 import java.awt.BorderLayout;
@@ -27,6 +28,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
@@ -35,20 +38,26 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
- * JSpinField2 is a numeric field with 2 spin buttons to increase or decrease
- * the value. It has the same interface as the "old" JSpinField but uses a JSpinner
- * internally (since J2SE SDK 1.4) rather than a scrollbar for emulating the spin buttons.
+ * JSpinField is a numeric field with 2 spin buttons to increase or decrease the
+ * value. It has the same interface as the "old" JSpinField but uses a JSpinner
+ * internally (since J2SE SDK 1.4) rather than a scrollbar for emulating the
+ * spin buttons.
  * 
  * @author Kai Toedter
- * @version 1.2
+ * @version $LastChangedRevision: 85 $
+ * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
  */
-public class JSpinField extends JPanel implements ChangeListener, CaretListener, ActionListener {
+public class JSpinField extends JPanel implements ChangeListener, CaretListener, ActionListener,
+		FocusListener {
+	private static final long serialVersionUID = 1694904792717740650L;
+
 	protected JSpinner spinner;
 
 	/** the text (number) field */
@@ -59,27 +68,30 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 	protected Color darkGreen;
 
 	/**
-	 * Default JSpinField constructor.
+	 * Default JSpinField constructor. The valid value range is between
+	 * Integer.MIN_VALUE and Integer.MAX_VALUE. The initial value is 0.
 	 */
 	public JSpinField() {
-	    this(0,Integer.MAX_VALUE);
+		this(Integer.MIN_VALUE, Integer.MAX_VALUE);
 	}
-	
+
 	/**
-	 * JSpinField constructor with given minimum and maximum vaues..
+	 * JSpinField constructor with given minimum and maximum vaues and initial
+	 * value 0.
 	 */
 	public JSpinField(int min, int max) {
 		super();
+		setName("JSpinField");
 		this.min = min;
-		if(max < min)
-		    max = min;
+		if (max < min)
+			max = min;
 		this.max = max;
 		value = 0;
-		if(value < min)
-		    value = min;
-		if(value > max)
-		    value = max;
-		
+		if (value < min)
+			value = min;
+		if (value > max)
+			value = max;
+
 		darkGreen = new Color(0, 150, 0);
 		setLayout(new BorderLayout());
 		textField = new JTextField();
@@ -88,9 +100,19 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 		textField.setHorizontalAlignment(SwingConstants.RIGHT);
 		textField.setBorder(BorderFactory.createEmptyBorder());
 		textField.setText(Integer.toString(value));
-		spinner = new JSpinner();
+		textField.addFocusListener(this);
+		spinner = new JSpinner() {
+			private static final long serialVersionUID = -6287709243342021172L;
+			private JTextField textField = new JTextField();
+
+			public Dimension getPreferredSize() {
+				Dimension size = super.getPreferredSize();
+				return new Dimension(size.width, textField.getPreferredSize().height);
+			}
+		};
 		spinner.setEditor(textField);
 		spinner.addChangeListener(this);
+		// spinner.setSize(spinner.getWidth(), textField.getHeight());
 		add(spinner, BorderLayout.CENTER);
 	}
 
@@ -98,10 +120,10 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 		JTextField testTextField = new JTextField(Integer.toString(max));
 		int width = testTextField.getPreferredSize().width;
 		int height = testTextField.getPreferredSize().height;
-		textField.setPreferredSize(new Dimension(width,height));
+		textField.setPreferredSize(new Dimension(width, height));
 		textField.revalidate();
 	}
-	
+
 	/**
 	 * Is invoked when the spinner model changes
 	 * 
@@ -124,7 +146,6 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 	 */
 	protected void setValue(int newValue, boolean updateTextField, boolean firePropertyChange) {
 		int oldValue = value;
-
 		if (newValue < min) {
 			value = min;
 		} else if (newValue > max) {
@@ -138,7 +159,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 			textField.setForeground(Color.black);
 		}
 
-		if(firePropertyChange) {
+		if (firePropertyChange) {
 			firePropertyChange("value", oldValue, value);
 		}
 	}
@@ -230,10 +251,10 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 	}
 
 	/**
-	 * DOCUMENT ME!
+	 * Sets the foreground
 	 * 
 	 * @param fg
-	 *            DOCUMENT ME!
+	 *            the foreground
 	 */
 	public void setForeground(Color fg) {
 		if (textField != null) {
@@ -246,7 +267,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 	 * being an integer, the value is colored green or red.
 	 * 
 	 * @param e
-	 *            Description of the Parameter
+	 *            the caret event
 	 */
 	public void caretUpdate(CaretEvent e) {
 		try {
@@ -291,8 +312,16 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 	 */
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
-		textField.setEnabled(enabled);
 		spinner.setEnabled(enabled);
+		textField.setEnabled(enabled);
+		/*
+		 * Fixes the background bug
+		 * 4991597 and sets the background explicitely to a
+		 * TextField.inactiveBackground.
+		 */
+		if (!enabled) {
+			textField.setBackground(UIManager.getColor("TextField.inactiveBackground"));
+		}
 	}
 
 	/**
@@ -306,15 +335,6 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 		return spinner;
 	}
 
-    /**
-     * Returns "JSpinField".
-     *
-     * @return the name value
-     */
-    public String getName() {
-        return "JSpinField";
-    }
-
 	/**
 	 * Creates a JFrame with a JSpinField inside and can be used for testing.
 	 * 
@@ -322,9 +342,25 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 	 *            The command line arguments
 	 */
 	public static void main(String[] s) {
-		JFrame frame = new JFrame("JSpinField2");
+		JFrame frame = new JFrame("JSpinField");
 		frame.getContentPane().add(new JSpinField());
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
+	 */
+	public void focusGained(FocusEvent e) {
+	}
+
+	/**
+	 * The value of the text field is checked against a valid (green) value. If
+	 * valid, the value is set and a property change is fired.
+	 */
+	public void focusLost(FocusEvent e) {
+		actionPerformed(null);
 	}
 }

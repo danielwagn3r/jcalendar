@@ -22,6 +22,8 @@ package com.toedter.calendar;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.DateFormatSymbols;
@@ -32,7 +34,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -41,21 +45,33 @@ import javax.swing.event.ChangeListener;
  * JMonthChooser is a bean for choosing a month.
  * 
  * @author Kai Toedter
- * @version 1.2
+ * @version $LastChangedRevision: 100 $
+ * @version $LastChangedDate: 2006-06-04 14:36:06 +0200 (So, 04 Jun 2006) $
  */
-public class JMonthChooser extends JPanel implements ItemListener, ChangeListener {
+public class JMonthChooser extends JPanel implements ItemListener,
+		ChangeListener {
+	private static final long serialVersionUID = -2028361332231218527L;
+
 	/** true, if the month chooser has a spinner component */
 	protected boolean hasSpinner;
+
 	private Locale locale;
+
 	private int month;
+
 	private int oldSpinnerValue = 0;
 
 	// needed for comparison
 	private JDayChooser dayChooser;
+
 	private JYearChooser yearChooser;
+
 	private JComboBox comboBox;
+
 	private JSpinner spinner;
+
 	private boolean initialized;
+
 	private boolean localInitialize;
 
 	/**
@@ -73,7 +89,7 @@ public class JMonthChooser extends JPanel implements ItemListener, ChangeListene
 	 */
 	public JMonthChooser(boolean hasSpinner) {
 		super();
-
+		setName("JMonthChooser");
 		this.hasSpinner = hasSpinner;
 
 		setLayout(new BorderLayout());
@@ -86,10 +102,22 @@ public class JMonthChooser extends JPanel implements ItemListener, ChangeListene
 		initNames();
 
 		if (hasSpinner) {
-			spinner = new JSpinner();
+			spinner = new JSpinner() {
+				private static final long serialVersionUID = 1L;
+
+				private JTextField textField = new JTextField();
+
+				public Dimension getPreferredSize() {
+					Dimension size = super.getPreferredSize();
+					return new Dimension(size.width, textField
+							.getPreferredSize().height);
+				}
+			};
 			spinner.addChangeListener(this);
-			comboBox.setBorder(new EmptyBorder(0, 0, 0, 0));
 			spinner.setEditor(comboBox);
+			comboBox.setBorder(new EmptyBorder(0, 0, 0, 0));
+			updateUI();
+
 			add(spinner, BorderLayout.WEST);
 		} else {
 			add(comboBox, BorderLayout.WEST);
@@ -127,7 +155,8 @@ public class JMonthChooser extends JPanel implements ItemListener, ChangeListene
 	 *            the change event.
 	 */
 	public void stateChanged(ChangeEvent e) {
-		SpinnerNumberModel model = (SpinnerNumberModel) ((JSpinner) e.getSource()).getModel();
+		SpinnerNumberModel model = (SpinnerNumberModel) ((JSpinner) e
+				.getSource()).getModel();
 		int value = model.getNumber().intValue();
 		boolean increase = (value > oldSpinnerValue) ? true : false;
 		oldSpinnerValue = value;
@@ -180,7 +209,8 @@ public class JMonthChooser extends JPanel implements ItemListener, ChangeListene
 	}
 
 	/**
-	 * Sets the month attribute of the JMonthChooser object. Fires a property change "month".
+	 * Sets the month attribute of the JMonthChooser object. Fires a property
+	 * change "month".
 	 * 
 	 * @param newMonth
 	 *            the new month value
@@ -207,7 +237,9 @@ public class JMonthChooser extends JPanel implements ItemListener, ChangeListene
 	}
 
 	/**
-	 * Sets the month. This is a bound property.
+	 * Sets the month. This is a bound property. Valuse are valid between 0
+	 * (January) and 11 (December). A value < 0 will be treated as 0, a value >
+	 * 11 will be treated as 11.
 	 * 
 	 * @param newMonth
 	 *            the new month value
@@ -215,9 +247,13 @@ public class JMonthChooser extends JPanel implements ItemListener, ChangeListene
 	 * @see #getMonth
 	 */
 	public void setMonth(int newMonth) {
-	    if(newMonth < 0 || newMonth> 11)
-	        return;
-		setMonth(newMonth, true);
+		if (newMonth < 0 || newMonth == Integer.MIN_VALUE) {
+			setMonth(0, true);
+		} else if (newMonth > 11) {
+			setMonth(11, true);
+		} else {
+			setMonth(newMonth, true);
+		}
 	}
 
 	/**
@@ -240,8 +276,8 @@ public class JMonthChooser extends JPanel implements ItemListener, ChangeListene
 	}
 
 	/**
-	 * Convenience method set a year chooser. If set, the spin for the month buttons will spin
-	 * the year as well
+	 * Convenience method set a year chooser. If set, the spin for the month
+	 * buttons will spin the year as well
 	 * 
 	 * @param yearChooser
 	 *            the new yearChooser value
@@ -325,13 +361,32 @@ public class JMonthChooser extends JPanel implements ItemListener, ChangeListene
 	}
 
     /**
-     * Returns "JMonthChooser".
+     * Sets the font for this component.
      *
-     * @return the name value
+     * @param font the desired <code>Font</code> for this component
      */
-    public String getName() {
-        return "JMonthChooser";
-    }
+	public void setFont(Font font) {
+		if (comboBox != null) {
+			comboBox.setFont(font);
+		}
+		super.setFont(font);
+	}
+
+	/**
+	 * Updates the UI.
+	 * 
+	 * @see javax.swing.JPanel#updateUI()
+	 */
+	public void updateUI() {
+		final JSpinner testSpinner = new JSpinner();
+		if (spinner != null) {
+			if ("Windows".equals(UIManager.getLookAndFeel().getID())) {
+				spinner.setBorder(testSpinner.getBorder());
+			} else {
+				spinner.setBorder(new EmptyBorder(0, 0, 0, 0));
+			}
+		}
+	}
 
 	/**
 	 * Creates a JFrame with a JMonthChooser inside and can be used for testing.

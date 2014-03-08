@@ -25,6 +25,7 @@ import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Paint;
+
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -37,10 +38,12 @@ import javax.swing.border.Border;
  * A simple JPanel with a border and a title
  *
  * @author Kai Toedter
- * @version 1.2
+ * @version $LastChangedRevision: 85 $
+ * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fr, 28 Apr 2006) $
  */
 public class JTitlePanel extends JPanel {
-    protected JPanel northPanel;
+	private static final long serialVersionUID = 9104873267039717087L;
+	protected JPanel northPanel;
     protected JLabel label;
     
     /**
@@ -84,8 +87,11 @@ public class JTitlePanel extends JPanel {
     	this.label.setText(label);
     	this.label.setIcon(icon);
     }
+    
     private static class GradientPanel extends JPanel {
-        private GradientPanel(Color background) {
+		private static final long serialVersionUID = -6385751027379193053L;
+
+		private GradientPanel(Color background) {
             setBackground(background);
         }
 
@@ -94,7 +100,8 @@ public class JTitlePanel extends JPanel {
 
             if (isOpaque()) {
                 // Color controlColor = UIManager.getColor("control");
-                Color controlColor = new Color(252, 198, 82);
+                // Color controlColor = new Color(252, 198, 82);
+                Color controlColor = new Color(99, 153, 255);
                 int width = getWidth();
                 int height = getHeight();
 
