@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.swing.JComponent;
+import javax.swing.JFormattedTextField;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.UIManager;
@@ -18,8 +19,8 @@ import javax.swing.event.ChangeListener;
  * JSpinnerDateEditor is a date editor based on a JSpinner.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 100 $
- * @version $LastChangedDate: 2006-06-04 14:36:06 +0200 (So, 04 Jun 2006) $
+ * @version $LastChangedRevision: 147 $
+ * @version $LastChangedDate: 2011-06-06 20:36:53 +0200 (Mo, 06 Jun 2011) $
  */
 public class JSpinnerDateEditor extends JSpinner implements IDateEditor,
 		FocusListener, ChangeListener {
@@ -41,6 +42,7 @@ public class JSpinnerDateEditor extends JSpinner implements IDateEditor,
 		DateUtil dateUtil = new DateUtil();
 		setMinSelectableDate(dateUtil.getMinSelectableDate());
 		setMaxSelectableDate(dateUtil.getMaxSelectableDate());
+		((JSpinner.DateEditor)getEditor()).getTextField().setFocusLostBehavior(JFormattedTextField.PERSIST);
 		addChangeListener(this);
 	}
 
@@ -107,6 +109,7 @@ public class JSpinnerDateEditor extends JSpinner implements IDateEditor,
 		super.setLocale(locale);
 		dateFormatter = (SimpleDateFormat) DateFormat.getDateInstance(
 				DateFormat.MEDIUM, locale);
+		setEditor(new JSpinner.DateEditor(this, dateFormatter.toPattern()));
 		setDateFormatString(dateFormatter.toPattern());
 	}
 

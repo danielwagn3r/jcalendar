@@ -45,8 +45,8 @@ import javax.swing.event.ChangeListener;
  * JMonthChooser is a bean for choosing a month.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 100 $
- * @version $LastChangedDate: 2006-06-04 14:36:06 +0200 (So, 04 Jun 2006) $
+ * @version $LastChangedRevision: 159 $
+ * @version $LastChangedDate: 2011-06-22 21:07:24 +0200 (Mi, 22 Jun 2011) $
  */
 public class JMonthChooser extends JPanel implements ItemListener,
 		ChangeListener {
@@ -149,7 +149,7 @@ public class JMonthChooser extends JPanel implements ItemListener,
 	}
 
 	/**
-	 * Is invoked if the state of the spnner changes.
+	 * Is invoked if the state of the spinner changes.
 	 * 
 	 * @param e
 	 *            the change event.

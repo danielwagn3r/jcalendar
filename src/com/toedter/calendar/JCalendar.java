@@ -24,31 +24,46 @@ package com.toedter.calendar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import com.toedter.components.UTF8ResourceBundle;
 
 /**
  * JCalendar is a bean for entering a date by choosing the year, month and day.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 95 $
- * @version $LastChangedDate: 2006-05-05 18:43:15 +0200 (Fr, 05 Mai 2006) $
+ * @version $LastChangedRevision: 159 $
+ * @version $LastChangedDate: 2011-06-22 21:07:24 +0200 (Mi, 22 Jun 2011) $
  */
 public class JCalendar extends JPanel implements PropertyChangeListener {
 	private static final long serialVersionUID = 8913369762644440133L;
 
 	private Calendar calendar;
+	private boolean initialized = false;
+	private final JPanel monthYearPanel;
+	private final JPanel specialButtonPanel;
+	private boolean isTodayButtonVisible;
+	private boolean isNullDateButtonVisible;
+	private final String defaultTodayButtonText = "Today";
+	private final String defaultNullDateButtonText = "No Date";
+	private String todayButtonText;
+	private String nullDateButtonText;
 
 	/** the day chooser */
 	protected JDayChooser dayChooser;
-	private boolean initialized = false;
 
 	/** indicates if weeks of year shall be visible */
 	protected boolean weekOfYearVisible = true;
@@ -59,14 +74,12 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	/** the month chooser */
 	protected JMonthChooser monthChooser;
 
-	private JPanel monthYearPanel;
-
-	/** the year chhoser */
+	/** the year chooser */
 	protected JYearChooser yearChooser;
 
-	protected Date minSelectableDate;
+	private final JButton todayButton;
 
-	protected Date maxSelectableDate;
+	private final JButton nullDateButton;
 
 	/**
 	 * Default JCalendar constructor.
@@ -165,7 +178,8 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	 * @param weekOfYearVisible
 	 *            true, if weeks of year shall be visible
 	 */
-	public JCalendar(Date date, Locale locale, boolean monthSpinner, boolean weekOfYearVisible) {
+	public JCalendar(Date date, Locale locale, boolean monthSpinner,
+			boolean weekOfYearVisible) {
 
 		setName("JCalendar");
 
@@ -175,13 +189,13 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 		yearChooser = null;
 		this.weekOfYearVisible = weekOfYearVisible;
 
-		this.locale = locale;
-
 		if (locale == null) {
 			this.locale = Locale.getDefault();
+		} else {
+			this.locale = locale;
 		}
 
-		calendar = Calendar.getInstance();
+		calendar = Calendar.getInstance(this.locale);
 
 		setLayout(new BorderLayout());
 
@@ -191,18 +205,39 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 		monthChooser = new JMonthChooser(monthSpinner);
 		yearChooser = new JYearChooser();
 		monthChooser.setYearChooser(yearChooser);
+		monthChooser.setLocale(this.locale);
 		monthYearPanel.add(monthChooser, BorderLayout.WEST);
 		monthYearPanel.add(yearChooser, BorderLayout.CENTER);
 		monthYearPanel.setBorder(BorderFactory.createEmptyBorder());
 
 		dayChooser = new JDayChooser(weekOfYearVisible);
 		dayChooser.addPropertyChangeListener(this);
+		dayChooser.setLocale(this.locale);
+
 		monthChooser.setDayChooser(dayChooser);
 		monthChooser.addPropertyChangeListener(this);
 		yearChooser.setDayChooser(dayChooser);
 		yearChooser.addPropertyChangeListener(this);
 		add(monthYearPanel, BorderLayout.NORTH);
 		add(dayChooser, BorderLayout.CENTER);
+
+		specialButtonPanel = new JPanel();
+		todayButton = new JButton();
+		todayButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				setDate(new Date());
+			}
+		});
+		nullDateButton = new JButton();
+		nullDateButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				dayChooser.firePropertyChange("day", 0, -1);
+			}
+		});
+		specialButtonPanel.setVisible(false);
+		add(specialButtonPanel, BorderLayout.SOUTH);
 
 		// Set the initialized flag before setting the calendar. This will
 		// cause the other components to be updated properly.
@@ -298,7 +333,8 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 			Calendar c = (Calendar) calendar.clone();
 
 			if (evt.getPropertyName().equals("day")) {
-				c.set(Calendar.DAY_OF_MONTH, ((Integer) evt.getNewValue()).intValue());
+				c.set(Calendar.DAY_OF_MONTH,
+						((Integer) evt.getNewValue()).intValue());
 				setCalendar(c, false);
 			} else if (evt.getPropertyName().equals("month")) {
 				c.set(Calendar.MONTH, ((Integer) evt.getNewValue()).intValue());
@@ -332,8 +368,8 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	 * 
 	 * @param c
 	 *            the new calendar
-	 * @throws NullPointerException -
-	 *             if c is null;
+	 * @throws NullPointerException
+	 *             - if c is null;
 	 * @see #getCalendar
 	 */
 	public void setCalendar(Calendar c) {
@@ -347,8 +383,8 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	 *            the new calendar value
 	 * @param update
 	 *            the new calendar value
-	 * @throws NullPointerException -
-	 *             if c is null;
+	 * @throws NullPointerException
+	 *             - if c is null;
 	 */
 	private void setCalendar(Calendar c, boolean update) {
 		if (c == null) {
@@ -440,6 +476,7 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 			locale = l;
 			dayChooser.setLocale(locale);
 			monthChooser.setLocale(locale);
+			relayoutSpecialButtonPanel();
 			firePropertyChange("locale", oldLocale, locale);
 		}
 	}
@@ -470,7 +507,8 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	 * @param decorationBackgroundVisible
 	 *            true, if the decoration background should be visible.
 	 */
-	public void setDecorationBackgroundVisible(boolean decorationBackgroundVisible) {
+	public void setDecorationBackgroundVisible(
+			boolean decorationBackgroundVisible) {
 		dayChooser.setDecorationBackgroundVisible(decorationBackgroundVisible);
 		setLocale(locale); // hack for doing complete new layout :)
 	}
@@ -566,8 +604,8 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	 * 
 	 * @param date
 	 *            the new date.
-	 * @throws NullPointerException -
-	 *             if tha date is null
+	 * @throws NullPointerException
+	 *             - if the date is null
 	 */
 	public void setDate(Date date) {
 		Date oldDate = calendar.getTime();
@@ -585,8 +623,8 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	}
 
 	/**
-	 * Sets a valid date range for selectable dates. If max is before
-	 * min, the default range with no limitation is set.
+	 * Sets a valid date range for selectable dates. If max is before min, the
+	 * default range with no limitation is set.
 	 * 
 	 * @param min
 	 *            the minimum selectable date or null (then the minimum date is
@@ -620,7 +658,8 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	/**
 	 * Sets the maximum selectable date.
 	 * 
-	 * @param max maximum selectable date
+	 * @param max
+	 *            maximum selectable date
 	 */
 	public void setMaxSelectableDate(Date max) {
 		dayChooser.setMaxSelectableDate(max);
@@ -629,7 +668,8 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	/**
 	 * Sets the minimum selectable date.
 	 * 
-	 * @param min minimum selectable date
+	 * @param min
+	 *            minimum selectable date
 	 */
 	public void setMinSelectableDate(Date min) {
 		dayChooser.setMinSelectableDate(min);
@@ -656,5 +696,154 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
 	 */
 	public void setMaxDayCharacters(int maxDayCharacters) {
 		dayChooser.setMaxDayCharacters(maxDayCharacters);
+	}
+
+	/**
+	 * Sets the Today button visible.
+	 * 
+	 * @param isTodayButtonVisible
+	 *            true, is the today button shall be visible.
+	 */
+	public void setTodayButtonVisible(boolean isTodayButtonVisible) {
+		this.isTodayButtonVisible = isTodayButtonVisible;
+		relayoutSpecialButtonPanel();
+	}
+
+	/**
+	 * @return true, if Today button is visible.
+	 */
+	public boolean isTodayButtonVisible() {
+		return isTodayButtonVisible;
+	}
+
+	/**
+	 * Sets the Null Date button visible.
+	 * 
+	 * @param isNullDateButtonVisible
+	 *            true, is the Null Date button shall be visible.
+	 */
+	public void setNullDateButtonVisible(boolean isNullDateButtonVisible) {
+		this.isNullDateButtonVisible = isNullDateButtonVisible;
+		relayoutSpecialButtonPanel();
+	}
+
+	/**
+	 * @return true, if Null Date button is visible.
+	 */
+	public boolean isNullDateButtonVisible() {
+		return isNullDateButtonVisible;
+	}
+
+	private void relayoutSpecialButtonPanel() {
+		ResourceBundle resourceBundle = null;
+
+		try {
+			resourceBundle = UTF8ResourceBundle.getBundle(
+					"com.toedter.calendar.jcalendar", locale);
+		} catch (Exception e) {
+			// ignore, fall back to set texts or defaults
+			System.out.println(e.getMessage());
+		}
+
+		specialButtonPanel.removeAll();
+		int buttonCount = 0;
+		if (isTodayButtonVisible) {
+			String text = todayButtonText;
+			if (text == null && resourceBundle != null) {
+				try {
+					text = resourceBundle.getString("todayButton.text");
+				} catch (Exception e) {
+					// ignore, fall back to set texts or defaults
+				}
+			}
+			if (text == null) {
+				text = defaultTodayButtonText;
+			}
+			todayButton.setText(text);
+			specialButtonPanel.add(todayButton);
+			buttonCount++;
+		}
+		if (isNullDateButtonVisible) {
+			String text = nullDateButtonText;
+			if (text == null && resourceBundle != null) {
+				try {
+					text = resourceBundle.getString("nullDateButton.text");
+				} catch (Exception e) {
+					// ignore, fall back to set texts or defaults
+				}
+			}
+			if (text == null) {
+				text = defaultNullDateButtonText;
+			}
+			nullDateButton.setText(text);
+			specialButtonPanel.add(nullDateButton);
+			buttonCount++;
+		}
+
+		specialButtonPanel.setLayout(new GridLayout(1, buttonCount));
+		if (isTodayButtonVisible) {
+			specialButtonPanel.add(todayButton);
+		}
+		if (isNullDateButtonVisible) {
+			specialButtonPanel.add(nullDateButton);
+		}
+
+		specialButtonPanel.setVisible(isNullDateButtonVisible
+				|| isTodayButtonVisible);
+
+		todayButton.invalidate();
+		todayButton.repaint();
+		nullDateButton.invalidate();
+		nullDateButton.repaint();
+		specialButtonPanel.invalidate();
+		specialButtonPanel.doLayout();
+		specialButtonPanel.repaint();
+		invalidate();
+		repaint();
+	}
+
+	/**
+	 * @return the text of the Today button
+	 */
+	public String getTodayButtonText() {
+		return todayButtonText;
+	}
+
+	/**
+	 * Sets the Today button text.
+	 * 
+	 * @param todayButtonText
+	 *            the new text
+	 */
+	public void setTodayButtonText(String todayButtonText) {
+		if (todayButtonText != null & todayButtonText.trim().length() == 0) {
+			this.todayButtonText = null;
+		} else {
+			this.todayButtonText = todayButtonText;
+		}
+		relayoutSpecialButtonPanel();
+	}
+
+	/**
+	 * @return the text of the Null Date button
+	 */
+	public String getNullDateButtonText() {
+		return nullDateButtonText;
+	}
+
+	/**
+	 * Sets the Null Date button text.
+	 * 
+	 * @param nullDateButtonText
+	 *            the new text
+	 */
+	public void setNullDateButtonText(String nullDateButtonText) {
+		if (nullDateButtonText != null
+				& nullDateButtonText.trim().length() == 0) {
+			this.nullDateButtonText = null;
+		} else {
+			this.nullDateButtonText = nullDateButtonText;
+		}
+		relayoutSpecialButtonPanel();
 	}
 }

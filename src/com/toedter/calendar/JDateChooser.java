@@ -35,6 +35,7 @@ import java.util.Locale;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -45,13 +46,13 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
- * A date chooser containig a date editor and a button, that makes a JCalendar
+ * A date chooser containing a date editor and a button, that makes a JCalendar
  * visible for choosing a date. If no date editor is specified, a
  * JTextFieldDateEditor is used as default.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 101 $
- * @version $LastChangedDate: 2006-06-04 14:42:29 +0200 (So, 04 Jun 2006) $
+ * @version $LastChangedRevision: 149 $
+ * @version $LastChangedDate: 2011-06-07 19:05:02 +0200 (Di, 07 Jun 2011) $
  */
 public class JDateChooser extends JPanel implements ActionListener,
 		PropertyChangeListener {
@@ -144,7 +145,7 @@ public class JDateChooser extends JPanel implements ActionListener,
 	 * @param maskPattern
 	 *            the mask pattern, e.g. "##/##/##"
 	 * @param placeholder
-	 *            the placeholer charachter, e.g. '_'
+	 *            the place holder character, e.g. '_'
 	 */
 	public JDateChooser(String datePattern, String maskPattern, char placeholder) {
 		this(null, null, datePattern, new JTextFieldDateEditor(datePattern,
@@ -238,7 +239,7 @@ public class JDateChooser extends JPanel implements ActionListener,
 
 		lastSelectedDate = date;
 
-		// Corrects a problem that occured when the JMonthChooser's combobox is
+		// Corrects a problem that occurred when the JMonthChooser's combobox is
 		// displayed, and a click outside the popup does not close it.
 
 		// The following idea was originally provided by forum user
@@ -274,7 +275,7 @@ public class JDateChooser extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * Called when the jalendar button was pressed.
+	 * Called when the calendar button was pressed.
 	 * 
 	 * @param e
 	 *            the action event
@@ -306,7 +307,11 @@ public class JDateChooser extends JPanel implements ActionListener,
 			if (popup.isVisible()) {
 				dateSelected = true;
 				popup.setVisible(false);
-				setDate(jcalendar.getCalendar().getTime());
+				if (((Integer)evt.getNewValue()).intValue() > 0) {
+					setDate(jcalendar.getCalendar().getTime());
+				} else {
+					setDate(null);
+				}
 			}
 		} else if (evt.getPropertyName().equals("date")) {
 			if (evt.getSource() == dateEditor) {
@@ -536,14 +541,22 @@ public class JDateChooser extends JPanel implements ActionListener,
 	}
 
 	/**
-	 * Should only be invoked if the JDateChooser is not used anymore. Due to popup
-	 * handling it had to register a change listener to the default menu
+	 * Should only be invoked if the JDateChooser is not used anymore. Due to
+	 * popup handling it had to register a change listener to the default menu
 	 * selection manager which will be unregistered here. Use this method to
 	 * cleanup possible memory leaks.
 	 */
 	public void cleanup() {
-		MenuSelectionManager.defaultManager().removeChangeListener(changeListener);
+		MenuSelectionManager.defaultManager().removeChangeListener(
+				changeListener);
 		changeListener = null;
+	}
+
+	public boolean requestFocusInWindow() {
+		if (dateEditor instanceof JComponent) {
+			return ((JComponent) dateEditor).requestFocusInWindow();
+		}
+		return super.requestFocusInWindow();
 	}
 
 	/**
@@ -572,6 +585,8 @@ public class JDateChooser extends JPanel implements ActionListener,
 		frame.getContentPane().add(dateChooser);
 		frame.pack();
 		frame.setVisible(true);
+
+		dateChooser.requestFocusInWindow();
 	}
 
 }

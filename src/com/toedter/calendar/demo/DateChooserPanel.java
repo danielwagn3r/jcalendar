@@ -1,6 +1,6 @@
 /*
  *  DateChooserPanel.java  - A panel to demo several JDateChooser configurations.
-  *  Copyright (C) 2006 Kai Toedter
+ *  Copyright (C) 2006 Kai Toedter
  *  kai@toedter.com
  *  www.toedter.com
  *
@@ -40,12 +40,12 @@ import com.toedter.calendar.JSpinnerDateEditor;
  * A demonstration panel including several JDateChoosers.
  * 
  * @author Kai Toedter
- * @version $LastChangedRevision: 96 $
- * @version $LastChangedDate: 2006-05-12 18:19:35 +0200 (Fr, 12 Mai 2006) $
+ * @version $LastChangedRevision: 153 $
+ * @version $LastChangedDate: 2011-06-09 16:49:22 +0200 (Do, 09 Jun 2011) $
  */
 public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 	private static final long serialVersionUID = -1282280858252793253L;
-	private JComponent[] components;
+	private final JComponent[] components;
 
 	public DateChooserPanel() {
 		setName("JDateChooser");
@@ -56,19 +56,30 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 
 		setLayout(gridbag);
 
-		components = new JComponent[5];
+		components = new JComponent[6];
 		components[0] = new JDateChooser();
-		components[1] = new JDateChooser(new Date());
-		components[2] = new JDateChooser(null, null, null,
+		components[1] = new JDateChooser();
+		((JDateChooser) components[1]).getJCalendar().getDayChooser()
+				.addDateEvaluator(new BirthdayEvaluator());
+		((JDateChooser) components[1]).getJCalendar().getDayChooser()
+				.addDateEvaluator(new TestDateEvaluator());
+		((JDateChooser) components[1]).getJCalendar().setTodayButtonVisible(
+				true);
+		((JDateChooser) components[1]).getJCalendar().setNullDateButtonVisible(
+				true);
+
+		components[2] = new JDateChooser(new Date());
+		components[3] = new JDateChooser(null, null, null,
 				new JSpinnerDateEditor());
-		components[3] = new JDateChooser("yyyy/MM/dd", "####/##/##", '_');
-		components[4] = new DemoTable();
+		components[4] = new JDateChooser("yyyy/MM/dd", "####/##/##", '_');
+		components[5] = new DemoTable();
 
 		addEntry("Default", components[0], gridbag);
-		addEntry("Default with date set", components[1], gridbag);
-		addEntry("Spinner Editor", components[2], gridbag);
-		addEntry("Explicite date pattern and mask", components[3], gridbag);
-		addEntry("Table with date editors", components[4], gridbag);
+		addEntry("Default (with addons)", components[1], gridbag);
+		addEntry("Default with date set", components[2], gridbag);
+		addEntry("Spinner Editor", components[3], gridbag);
+		addEntry("Explicite date pattern and mask", components[4], gridbag);
+		addEntry("Table with date editors", components[5], gridbag);
 	}
 
 	private void addEntry(String text, JComponent component, GridBagLayout grid) {
@@ -81,11 +92,11 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		grid.setConstraints(component, c);
 		add(component);
-		JPanel blankLine  = new JPanel() {
+		JPanel blankLine = new JPanel() {
 			private static final long serialVersionUID = 4514530330521503732L;
 
 			public Dimension getPreferredSize() {
-				return new Dimension(10,3);
+				return new Dimension(10, 3);
 			}
 		};
 		grid.setConstraints(blankLine, c);
@@ -158,36 +169,40 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.awt.Component#isEnabled()
 	 */
 	public boolean isEnabled() {
 		return ((JDateChooser) components[0]).isEnabled();
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javax.swing.JComponent#setEnabled(boolean)
 	 */
 	public void setEnabled(boolean enabled) {
 		for (int i = 0; i < 5; i++) {
 			components[i].setEnabled(enabled);
-		}		
+		}
 	}
-	
+
 	public Date getMinSelectableDate() {
 		return ((JDateChooser) components[0]).getMinSelectableDate();
 	}
-	
+
 	public void setMinSelectableDate(Date date) {
 		for (int i = 0; i < 4; i++) {
 			((JDateChooser) components[i]).setMinSelectableDate(date);
 		}
 	}
-	
+
 	public Date getMaxSelectableDate() {
 		return ((JDateChooser) components[0]).getMaxSelectableDate();
 	}
-	
+
 	public void setMaxSelectableDate(Date date) {
 		for (int i = 0; i < 4; i++) {
 			((JDateChooser) components[i]).setMaxSelectableDate(date);
