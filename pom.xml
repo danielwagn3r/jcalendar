@@ -21,6 +21,17 @@
         </license>
     </licenses>
 
+    <scm>
+        <url>https://github.com/kwaxi/jcalendar</url>
+        <developerConnection>git@github.com:kwaxi/jcalendar.git</developerConnection>
+        <connection>https://github.com/kwaxi/jcalendar.git</connection>
+    </scm>
+
+    <issueManagement>
+        <url>https://github.com/kwaxi/jcalendar/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -82,7 +93,50 @@
                         <manifestEntries>
                             <url>${project.url}</url>
                         </manifestEntries>
-                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                        <manifestSections>
+                            <manifestSection>
+                                <name>com/toedter/components/JLocaleChooser.class</name>
+                                <manifestEntries>
+                                    <Java-Bean>true</Java-Bean>
+                                </manifestEntries>
+                            </manifestSection>
+                            <manifestSection>
+                                <name>com/toedter/calendar/JCalendar.class</name>
+                                <manifestEntries>
+                                    <Java-Bean>true</Java-Bean>
+                                </manifestEntries>
+                            </manifestSection>
+                            <manifestSection>
+                                <name>com/toedter/calendar/JYearChooser.class</name>
+                                <manifestEntries>
+                                    <Java-Bean>true</Java-Bean>
+                                </manifestEntries>
+                            </manifestSection>
+                            <manifestSection>
+                                <name>com/toedter/calendar/JMonthChooser.class</name>
+                                <manifestEntries>
+                                    <Java-Bean>true</Java-Bean>
+                                </manifestEntries>
+                            </manifestSection>
+                            <manifestSection>
+                                <name>com/toedter/calendar/JDayChooser.class</name>
+                                <manifestEntries>
+                                    <Java-Bean>true</Java-Bean>
+                                </manifestEntries>
+                            </manifestSection>
+                            <manifestSection>
+                                <name>com/toedter/calendar/JDateChooser.class</name>
+                                <manifestEntries>
+                                    <Java-Bean>true</Java-Bean>
+                                </manifestEntries>
+                            </manifestSection>
+                            <manifestSection>
+                                <name>com/toedter/components/JSpinField.class</name>
+                                <manifestEntries>
+                                    <Java-Bean>true</Java-Bean>
+                                </manifestEntries>
+                            </manifestSection>
+                        </manifestSections>
                     </archive>
                 </configuration>
             </plugin>
