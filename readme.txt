@@ -30,8 +30,6 @@ license. Please read the file "index.html" in the doc directory.
 This distribution contains several sub-directories.
 They are listed and described below:
 
-  bin\             contains a launch script for the JCalendar
-                   demo application for Windows 7/Vista/XP/2000/NT/98.
   doc              contains HTML documentation (start with index.html).
   src\             contains all the sources to create a distribution.
                
