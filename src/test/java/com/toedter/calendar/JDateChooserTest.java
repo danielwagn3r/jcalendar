@@ -43,282 +43,282 @@ import org.junit.Test;
 
 public class JDateChooserTest {
 
-	JDateChooser jDateChooser;
+    JDateChooser jDateChooser;
 
-	@Before
-	public void setUp() throws Exception {
-		jDateChooser = new JDateChooser();
-	}
+    @Before
+    public void setUp() throws Exception {
+        jDateChooser = new JDateChooser();
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		jDateChooser = null;
-	}
+    @After
+    public void tearDown() throws Exception {
+        jDateChooser = null;
+    }
 
-	@Test
-	public void testDateConstructor() {
-		jDateChooser = new JDateChooser((Date) null); // null date
-		assertEquals(null, jDateChooser.getDate());
+    @Test
+    public void testDateConstructor() {
+        jDateChooser = new JDateChooser((Date) null); // null date
+        assertEquals(null, jDateChooser.getDate());
 
-		Date date = new Date();
-		jDateChooser = new JDateChooser(date);
-		assertEquals(date, jDateChooser.getDate());
-	}
+        Date date = new Date();
+        jDateChooser = new JDateChooser(date);
+        assertEquals(date, jDateChooser.getDate());
+    }
 
-	@Test
-	public void testDateEditorConstructor() {
-		jDateChooser = new JDateChooser((IDateEditor) null); // null date
-		assertEquals(null, jDateChooser.getDate());
+    @Test
+    public void testDateEditorConstructor() {
+        jDateChooser = new JDateChooser((IDateEditor) null); // null date
+        assertEquals(null, jDateChooser.getDate());
 
-		IDateEditor jSpinnerDateEditor = new JSpinnerDateEditor();
-		jDateChooser = new JDateChooser(jSpinnerDateEditor);
-		assertEquals(jSpinnerDateEditor, jDateChooser.getDateEditor());
-	}
+        IDateEditor jSpinnerDateEditor = new JSpinnerDateEditor();
+        jDateChooser = new JDateChooser(jSpinnerDateEditor);
+        assertEquals(jSpinnerDateEditor, jDateChooser.getDateEditor());
+    }
 
-	@Test
-	public void testDateDateFormateStringConstructor() {
-		jDateChooser = new JDateChooser(null, null);
-		String defaultFormat = ((SimpleDateFormat) DateFormat
-				.getDateInstance(DateFormat.MEDIUM)).toPattern();
+    @Test
+    public void testDateDateFormateStringConstructor() {
+        jDateChooser = new JDateChooser(null, null);
+        String defaultFormat = ((SimpleDateFormat) DateFormat
+                        .getDateInstance(DateFormat.MEDIUM)).toPattern();
 
-		assertEquals(null, jDateChooser.getDate());
-		assertEquals(defaultFormat, jDateChooser.getDateFormatString());
+        assertEquals(null, jDateChooser.getDate());
+        assertEquals(defaultFormat, jDateChooser.getDateFormatString());
 
-		Date date = new Date();
-		String dateFormatString = "dd/MM/yy";
-		jDateChooser = new JDateChooser(date, dateFormatString);
-		assertEquals(date, jDateChooser.getDate());
-		assertEquals(dateFormatString, jDateChooser.getDateFormatString());
-	}
+        Date date = new Date();
+        String dateFormatString = "dd/MM/yy";
+        jDateChooser = new JDateChooser(date, dateFormatString);
+        assertEquals(date, jDateChooser.getDate());
+        assertEquals(dateFormatString, jDateChooser.getDateFormatString());
+    }
 
-	@Test
-	public void testDatePatternConstructor() {
-		String datePattern = "dd/MM/yy";
-		String dateMask = "##/##/##";
-		jDateChooser = new JDateChooser(datePattern, dateMask, '_');
+    @Test
+    public void testDatePatternConstructor() {
+        String datePattern = "dd/MM/yy";
+        String dateMask = "##/##/##";
+        jDateChooser = new JDateChooser(datePattern, dateMask, '_');
 
-		assertEquals(datePattern, jDateChooser.getDateFormatString());
-		assertEquals(datePattern, jDateChooser.getDateEditor()
-				.getDateFormatString());
-	}
+        assertEquals(datePattern, jDateChooser.getDateFormatString());
+        assertEquals(datePattern, jDateChooser.getDateEditor()
+                        .getDateFormatString());
+    }
 
-	@Test
-	public void testBigConstructor() {
-		String datePattern = "dd/MM/yy";
-		Date date = new Date();
-		JCalendar jcalendar = new JCalendar();
-		IDateEditor jSpinnerDateEditor = new JSpinnerDateEditor();
+    @Test
+    public void testBigConstructor() {
+        String datePattern = "dd/MM/yy";
+        Date date = new Date();
+        JCalendar jcalendar = new JCalendar();
+        IDateEditor jSpinnerDateEditor = new JSpinnerDateEditor();
 
-		jDateChooser = new JDateChooser(jcalendar, date, datePattern,
-				jSpinnerDateEditor);
+        jDateChooser = new JDateChooser(jcalendar, date, datePattern,
+                        jSpinnerDateEditor);
 
-		assertEquals(datePattern, jDateChooser.getDateFormatString());
-		assertEquals(datePattern, jDateChooser.getDateEditor()
-				.getDateFormatString());
-		assertEquals(date, jDateChooser.getDate());
-		assertEquals(jcalendar, jDateChooser.getJCalendar());
-		assertEquals(date, jcalendar.getDate());
-		assertEquals(jSpinnerDateEditor, jDateChooser.getDateEditor());
-	}
+        assertEquals(datePattern, jDateChooser.getDateFormatString());
+        assertEquals(datePattern, jDateChooser.getDateEditor()
+                        .getDateFormatString());
+        assertEquals(date, jDateChooser.getDate());
+        assertEquals(jcalendar, jDateChooser.getJCalendar());
+        assertEquals(date, jcalendar.getDate());
+        assertEquals(jSpinnerDateEditor, jDateChooser.getDateEditor());
+    }
 
-	@Test
-	public void testSetGetDateFormatString() throws Exception {
-		String[] tests = { "dd.MM.yyyy", "MM/dd/yy", new String() };
+    @Test
+    public void testSetGetDateFormatString() throws Exception {
+        String[] tests = { "dd.MM.yyyy", "MM/dd/yy", new String() };
 
-		for (int i = 0; i < tests.length; i++) {
-			jDateChooser.setDateFormatString(tests[i]);
-			assertEquals(tests[i], jDateChooser.getDateFormatString());
-		}
+        for (int i = 0; i < tests.length; i++) {
+            jDateChooser.setDateFormatString(tests[i]);
+            assertEquals(tests[i], jDateChooser.getDateFormatString());
+        }
 
-		String[] tests2 = { null, "MM/xdd/yy" };
-		String defaultFormat = ((SimpleDateFormat) DateFormat
-				.getDateInstance(DateFormat.MEDIUM)).toPattern();
+        String[] tests2 = { null, "MM/xdd/yy" };
+        String defaultFormat = ((SimpleDateFormat) DateFormat
+                        .getDateInstance(DateFormat.MEDIUM)).toPattern();
 
-		for (int i = 0; i < tests2.length; i++) {
-			jDateChooser.setDateFormatString(tests2[i]);
-			assertEquals(defaultFormat, jDateChooser.getDateFormatString());
-		}
-	}
+        for (int i = 0; i < tests2.length; i++) {
+            jDateChooser.setDateFormatString(tests2[i]);
+            assertEquals(defaultFormat, jDateChooser.getDateFormatString());
+        }
+    }
 
-	@Test
-	public void testSetGetDate() {
-		Date[] tests = { new Date(), null };
+    @Test
+    public void testSetGetDate() {
+        Date[] tests = { new Date(), null };
 
-		for (int i = 0; i < tests.length; i++) {
-			jDateChooser.setDate(tests[i]);
-			assertEquals(tests[i], jDateChooser.getDate());
-		}
-	}
+        for (int i = 0; i < tests.length; i++) {
+            jDateChooser.setDate(tests[i]);
+            assertEquals(tests[i], jDateChooser.getDate());
+        }
+    }
 
-	@Test
-	public void testSetGetFont() {
-		Font[] tests = { Font.decode(""), Font.decode("Arial"), null };
+    @Test
+    public void testSetGetFont() {
+        Font[] tests = { Font.decode(""), Font.decode("Arial"), null };
 
-		for (int i = 0; i < tests.length; i++) {
-			jDateChooser.setFont(tests[i]);
-			assertEquals(tests[i], jDateChooser.getFont());
-		}
-	}
+        for (int i = 0; i < tests.length; i++) {
+            jDateChooser.setFont(tests[i]);
+            assertEquals(tests[i], jDateChooser.getFont());
+        }
+    }
 
-	@Test
-	public void testSetGetCalendar() throws Exception {
-		Calendar[] tests = { Calendar.getInstance(), null };
+    @Test
+    public void testSetGetCalendar() throws Exception {
+        Calendar[] tests = { Calendar.getInstance(), null };
 
-		for (int i = 0; i < tests.length; i++) {
-			jDateChooser.setCalendar(tests[i]);
-			assertEquals(tests[i], jDateChooser.getCalendar());
-		}
-	}
+        for (int i = 0; i < tests.length; i++) {
+            jDateChooser.setCalendar(tests[i]);
+            assertEquals(tests[i], jDateChooser.getCalendar());
+        }
+    }
 
-	@Test
-	public void testSetIsEnabled() throws Exception {
-		boolean[] tests = { true, false };
+    @Test
+    public void testSetIsEnabled() throws Exception {
+        boolean[] tests = { true, false };
 
-		for (int i = 0; i < tests.length; i++) {
-			jDateChooser.setEnabled(tests[i]);
-			assertEquals(tests[i], jDateChooser.isEnabled());
-		}
-	}
+        for (int i = 0; i < tests.length; i++) {
+            jDateChooser.setEnabled(tests[i]);
+            assertEquals(tests[i], jDateChooser.isEnabled());
+        }
+    }
 
-	@Test
-	public void testSetIcon() throws Exception {
-		URL iconURL = jDateChooser.getClass().getResource(
-				"/com/toedter/calendar/images/JMonthChooserColor32.gif");
-		ImageIcon icon = new ImageIcon(iconURL);
-		jDateChooser.setIcon(icon);
-		assertEquals(icon, jDateChooser.getCalendarButton().getIcon());
-	}
+    @Test
+    public void testSetIcon() throws Exception {
+        URL iconURL = jDateChooser.getClass().getResource(
+                        "/com/toedter/calendar/images/JMonthChooserColor32.gif");
+        ImageIcon icon = new ImageIcon(iconURL);
+        jDateChooser.setIcon(icon);
+        assertEquals(icon, jDateChooser.getCalendarButton().getIcon());
+    }
 
-	@Test(expected = NullPointerException.class)
-	public void testSetGetLocale() {
-		Locale[] tests = { Locale.getDefault(), Locale.GERMAN, Locale.US };
+    @Test(expected = NullPointerException.class)
+    public void testSetGetLocale() {
+        Locale[] tests = { Locale.getDefault(), Locale.GERMAN, Locale.US };
 
-		for (int i = 0; i < tests.length; i++) {
-			jDateChooser.setLocale(tests[i]);
-			assertEquals(tests[i], jDateChooser.getLocale());
-		}
+        for (int i = 0; i < tests.length; i++) {
+            jDateChooser.setLocale(tests[i]);
+            assertEquals(tests[i], jDateChooser.getLocale());
+        }
 
-		jDateChooser.setLocale(null);
-	}
+        jDateChooser.setLocale(null);
+    }
 
-	@Test
-	public void testAddPropertyChangeListener() throws Exception {
-		class MyListener implements PropertyChangeListener {
-			boolean called = false;
+    @Test
+    public void testAddPropertyChangeListener() throws Exception {
+        class MyListener implements PropertyChangeListener {
+            boolean called = false;
 
-			public void propertyChange(PropertyChangeEvent event) {
-				called = true;
-			}
-		}
-		MyListener listener = new MyListener();
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.addPropertyChangeListener("date", listener);
-		dateChooser.setDate(new Date());
-		assertTrue("Listener was not called", listener.called);
+            public void propertyChange(PropertyChangeEvent event) {
+                called = true;
+            }
+        }
+        MyListener listener = new MyListener();
+        JDateChooser dateChooser = new JDateChooser();
+        dateChooser.addPropertyChangeListener("date", listener);
+        dateChooser.setDate(new Date());
+        assertTrue("Listener was not called", listener.called);
 
-		dateChooser.removePropertyChangeListener("date", listener);
-		dateChooser.addPropertyChangeListener(listener);
-		listener.called = false;
-		dateChooser.setDate(new Date(System.currentTimeMillis() - 100));
-		assertTrue("Listener was not called", listener.called);
-	}
+        dateChooser.removePropertyChangeListener("date", listener);
+        dateChooser.addPropertyChangeListener(listener);
+        listener.called = false;
+        dateChooser.setDate(new Date(System.currentTimeMillis() - 100));
+        assertTrue("Listener was not called", listener.called);
+    }
 
-	@Test
-	public void testRemovePropertyChangeListener() throws Exception {
-		class MyListener implements PropertyChangeListener {
-			boolean called = false;
+    @Test
+    public void testRemovePropertyChangeListener() throws Exception {
+        class MyListener implements PropertyChangeListener {
+            boolean called = false;
 
-			public void propertyChange(PropertyChangeEvent event) {
-				called = true;
-			}
-		}
-		MyListener listener = new MyListener();
-		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.addPropertyChangeListener(listener);
-		dateChooser.removePropertyChangeListener(listener);
-		dateChooser.addPropertyChangeListener("date", listener);
-		dateChooser.removePropertyChangeListener("date", listener);
-		dateChooser.setDate(new Date());
-		assertFalse("Listener was called", listener.called);
-	}
+            public void propertyChange(PropertyChangeEvent event) {
+                called = true;
+            }
+        }
+        MyListener listener = new MyListener();
+        JDateChooser dateChooser = new JDateChooser();
+        dateChooser.addPropertyChangeListener(listener);
+        dateChooser.removePropertyChangeListener(listener);
+        dateChooser.addPropertyChangeListener("date", listener);
+        dateChooser.removePropertyChangeListener("date", listener);
+        dateChooser.setDate(new Date());
+        assertFalse("Listener was called", listener.called);
+    }
 
-	@Test
-	public void testNullDateWithSpinnerEditor() {
-		new JDateChooser(new JCalendar(), null, "", new JSpinnerDateEditor());
-	}
+    @Test
+    public void testNullDateWithSpinnerEditor() {
+        new JDateChooser(new JCalendar(), null, "", new JSpinnerDateEditor());
+    }
 
-	@Test
-	public void testNullDate() {
-		JDateChooser jDateChooser = new JDateChooser(new JSpinnerDateEditor());
-		jDateChooser.setDate(null);
-		assertNull("Date is not null", jDateChooser.getDate());
-	}
+    @Test
+    public void testNullDate() {
+        JDateChooser jDateChooser = new JDateChooser(new JSpinnerDateEditor());
+        jDateChooser.setDate(null);
+        assertNull("Date is not null", jDateChooser.getDate());
+    }
 
-	@Test
-	public void testDateChooserCallsListeners() {
-		class MyListener implements PropertyChangeListener {
-			boolean called = false;
+    @Test
+    public void testDateChooserCallsListeners() {
+        class MyListener implements PropertyChangeListener {
+            boolean called = false;
 
-			public void propertyChange(PropertyChangeEvent event) {
-				if ("date".equals(event.getPropertyName())) {
-					called = true;
-				}
-			}
-		}
+            public void propertyChange(PropertyChangeEvent event) {
+                if ("date".equals(event.getPropertyName())) {
+                    called = true;
+                }
+            }
+        }
 
-		MyListener listener1 = new MyListener();
-		MyListener listener2 = new MyListener();
+        MyListener listener1 = new MyListener();
+        MyListener listener2 = new MyListener();
 
-		JDateChooser chooser = new JDateChooser(new JSpinnerDateEditor());
-		chooser.addPropertyChangeListener("date", listener1);
-		chooser.addPropertyChangeListener(listener2);
+        JDateChooser chooser = new JDateChooser(new JSpinnerDateEditor());
+        chooser.addPropertyChangeListener("date", listener1);
+        chooser.addPropertyChangeListener(listener2);
 
-		chooser.setDate(new Date());
-		assertTrue("listener1 was not called", listener1.called);
-		assertTrue("listener2 was not called", listener2.called);
+        chooser.setDate(new Date());
+        assertTrue("listener1 was not called", listener1.called);
+        assertTrue("listener2 was not called", listener2.called);
 
-		listener1.called = false;
-		listener2.called = false;
-		chooser.setDate(null);
-		assertTrue("listener1 was not called", listener1.called);
-		assertTrue("listener2 was not called", listener2.called);
-	}
+        listener1.called = false;
+        listener2.called = false;
+        chooser.setDate(null);
+        assertTrue("listener1 was not called", listener1.called);
+        assertTrue("listener2 was not called", listener2.called);
+    }
 
-	@Test
-	public void testDateChooserCallsListeners2() {
-		class MyListener implements PropertyChangeListener {
-			boolean called = false;
+    @Test
+    public void testDateChooserCallsListeners2() {
+        class MyListener implements PropertyChangeListener {
+            boolean called = false;
 
-			public void propertyChange(PropertyChangeEvent event) {
-				if ("date".equals(event.getPropertyName())) {
-					called = true;
-				}
-			}
-		}
+            public void propertyChange(PropertyChangeEvent event) {
+                if ("date".equals(event.getPropertyName())) {
+                    called = true;
+                }
+            }
+        }
 
-		MyListener listener1 = new MyListener();
-		MyListener listener2 = new MyListener();
+        MyListener listener1 = new MyListener();
+        MyListener listener2 = new MyListener();
 
-		JDateChooser chooser = new JDateChooser();
-		chooser.addPropertyChangeListener("date", listener1);
-		chooser.addPropertyChangeListener(listener2);
+        JDateChooser chooser = new JDateChooser();
+        chooser.addPropertyChangeListener("date", listener1);
+        chooser.addPropertyChangeListener(listener2);
 
-		chooser.setDate(new Date());
-		assertTrue("listener1 was not called", listener1.called);
-		assertTrue("listener2 was not called", listener2.called);
+        chooser.setDate(new Date());
+        assertTrue("listener1 was not called", listener1.called);
+        assertTrue("listener2 was not called", listener2.called);
 
-		listener1.called = false;
-		listener2.called = false;
-		chooser.setDate(null);
-		assertTrue("listener1 was not called", listener1.called);
-		assertTrue("listener2 was not called", listener2.called);
-	}
+        listener1.called = false;
+        listener2.called = false;
+        chooser.setDate(null);
+        assertTrue("listener1 was not called", listener1.called);
+        assertTrue("listener2 was not called", listener2.called);
+    }
 
-	public static void main(String... args) {
-		junit.textui.TestRunner.run(suite());
-	}
+    public static void main(String... args) {
+        junit.textui.TestRunner.run(suite());
+    }
 
-	public static junit.framework.Test suite() {
-		return new JUnit4TestAdapter(JDateChooserTest.class);
-	}
+    public static junit.framework.Test suite() {
+        return new JUnit4TestAdapter(JDateChooserTest.class);
+    }
 }

@@ -36,124 +36,124 @@ import org.junit.Test;
 
 public class JCalendarTest {
 
-	JCalendar jCalendar;
+    JCalendar jCalendar;
 
-	@Before
-	public void setUp() throws Exception {
-		jCalendar = new JCalendar();
-	}
+    @Before
+    public void setUp() throws Exception {
+        jCalendar = new JCalendar();
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		jCalendar = null;
-	}
+    @After
+    public void tearDown() throws Exception {
+        jCalendar = null;
+    }
 
-	@Test
-	public void testDateConstructor() {
-		jCalendar = new JCalendar((Date) null); // null date
-		assertTrue(jCalendar.getDate() != null);
+    @Test
+    public void testDateConstructor() {
+        jCalendar = new JCalendar((Date) null); // null date
+        assertTrue(jCalendar.getDate() != null);
 
-		Date date = new Date();
-		jCalendar = new JCalendar(date);
-		assertEquals(date, jCalendar.getDate());
-	}
+        Date date = new Date();
+        jCalendar = new JCalendar(date);
+        assertEquals(date, jCalendar.getDate());
+    }
 
-	@Test
-	public void testSetGetDate() {
-		Date[] tests = { new Date() };
+    @Test
+    public void testSetGetDate() {
+        Date[] tests = { new Date() };
 
-		for (int i = 0; i < tests.length; i++) {
-			jCalendar.setDate(tests[i]);
-			assertEquals(tests[i], jCalendar.getDate());
-		}
-	}
+        for (int i = 0; i < tests.length; i++) {
+            jCalendar.setDate(tests[i]);
+            assertEquals(tests[i], jCalendar.getDate());
+        }
+    }
 
-	@Test(expected = NullPointerException.class)
-	public void testSetDateNull() {
-		jCalendar.setDate(null);
-	}
+    @Test(expected = NullPointerException.class)
+    public void testSetDateNull() {
+        jCalendar.setDate(null);
+    }
 
-	@Test
-	public void testSetGetCalendar() throws Exception {
-		Calendar[] tests = { Calendar.getInstance() };
+    @Test
+    public void testSetGetCalendar() throws Exception {
+        Calendar[] tests = { Calendar.getInstance() };
 
-		for (int i = 0; i < tests.length; i++) {
-			jCalendar.setCalendar(tests[i]);
-			assertEquals(tests[i], jCalendar.getCalendar());
-		}
-	}
+        for (int i = 0; i < tests.length; i++) {
+            jCalendar.setCalendar(tests[i]);
+            assertEquals(tests[i], jCalendar.getCalendar());
+        }
+    }
 
-	@Test(expected = NullPointerException.class)
-	public void testSetCalendarNull() throws Exception {
-		jCalendar.setCalendar(null);
-	}
+    @Test(expected = NullPointerException.class)
+    public void testSetCalendarNull() throws Exception {
+        jCalendar.setCalendar(null);
+    }
 
-	@Test
-	public void testSetIsEnabled() throws Exception {
-		boolean[] tests = { true, false };
+    @Test
+    public void testSetIsEnabled() throws Exception {
+        boolean[] tests = { true, false };
 
-		for (int i = 0; i < tests.length; i++) {
-			jCalendar.setEnabled(tests[i]);
-			assertEquals(tests[i], jCalendar.isEnabled());
-		}
-	}
+        for (int i = 0; i < tests.length; i++) {
+            jCalendar.setEnabled(tests[i]);
+            assertEquals(tests[i], jCalendar.isEnabled());
+        }
+    }
 
-	@Test
-	public void testAddPropertyChangeListener() throws Exception {
-		class MyListener implements PropertyChangeListener {
-			boolean called = false;
+    @Test
+    public void testAddPropertyChangeListener() throws Exception {
+        class MyListener implements PropertyChangeListener {
+            boolean called = false;
 
-			public void propertyChange(PropertyChangeEvent event) {
-				called = true;
-			}
-		}
-		MyListener listener = new MyListener();
-		JCalendar dateChooser = new JCalendar();
-		dateChooser.addPropertyChangeListener("date", listener);
-		dateChooser.setDate(new Date());
-		assertTrue("Listener was not called", listener.called);
+            public void propertyChange(PropertyChangeEvent event) {
+                called = true;
+            }
+        }
+        MyListener listener = new MyListener();
+        JCalendar dateChooser = new JCalendar();
+        dateChooser.addPropertyChangeListener("date", listener);
+        dateChooser.setDate(new Date());
+        assertTrue("Listener was not called", listener.called);
 
-		dateChooser.removePropertyChangeListener("date", listener);
-		dateChooser.addPropertyChangeListener(listener);
-		listener.called = false;
-		dateChooser.setDate(new Date(System.currentTimeMillis() - 100));
-		assertTrue("Listener was not called", listener.called);
-	}
+        dateChooser.removePropertyChangeListener("date", listener);
+        dateChooser.addPropertyChangeListener(listener);
+        listener.called = false;
+        dateChooser.setDate(new Date(System.currentTimeMillis() - 100));
+        assertTrue("Listener was not called", listener.called);
+    }
 
-	@Test
-	public void testRemovePropertyChangeListener() throws Exception {
-		class MyListener implements PropertyChangeListener {
-			boolean called = false;
+    @Test
+    public void testRemovePropertyChangeListener() throws Exception {
+        class MyListener implements PropertyChangeListener {
+            boolean called = false;
 
-			public void propertyChange(PropertyChangeEvent event) {
-				called = true;
-			}
-		}
-		MyListener listener = new MyListener();
-		JCalendar dateChooser = new JCalendar();
-		dateChooser.addPropertyChangeListener(listener);
-		dateChooser.removePropertyChangeListener(listener);
-		dateChooser.addPropertyChangeListener("date", listener);
-		dateChooser.removePropertyChangeListener("date", listener);
-		dateChooser.setDate(new Date());
-		assertFalse("Listener was called", listener.called);
-	}
+            public void propertyChange(PropertyChangeEvent event) {
+                called = true;
+            }
+        }
+        MyListener listener = new MyListener();
+        JCalendar dateChooser = new JCalendar();
+        dateChooser.addPropertyChangeListener(listener);
+        dateChooser.removePropertyChangeListener(listener);
+        dateChooser.addPropertyChangeListener("date", listener);
+        dateChooser.removePropertyChangeListener("date", listener);
+        dateChooser.setDate(new Date());
+        assertFalse("Listener was called", listener.called);
+    }
 
-	@Test
-	public void testLocale() {
-		Locale testLocale = Locale.ENGLISH;
-		jCalendar = new JCalendar(testLocale);
-		Locale monthChooserLocale = jCalendar.getMonthChooser().getLocale();
-		assertEquals(testLocale, monthChooserLocale);
-		Locale dayChooserLocale = jCalendar.getDayChooser().getLocale();
-		assertEquals(testLocale, dayChooserLocale);		
-	}
-	
-	public static void main(String... args) {
-		junit.textui.TestRunner.run(suite());
-	}
+    @Test
+    public void testLocale() {
+        Locale testLocale = Locale.ENGLISH;
+        jCalendar = new JCalendar(testLocale);
+        Locale monthChooserLocale = jCalendar.getMonthChooser().getLocale();
+        assertEquals(testLocale, monthChooserLocale);
+        Locale dayChooserLocale = jCalendar.getDayChooser().getLocale();
+        assertEquals(testLocale, dayChooserLocale);
+    }
 
-	public static junit.framework.Test suite() {
-		return new JUnit4TestAdapter(JCalendarTest.class);
-	}
+    public static void main(String... args) {
+        junit.textui.TestRunner.run(suite());
+    }
+
+    public static junit.framework.Test suite() {
+        return new JUnit4TestAdapter(JCalendarTest.class);
+    }
 }

@@ -30,10 +30,10 @@ import com.toedter.components.GenericBeanInfo;
  * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fri, 28 Apr 2006) $
  */
 public class JMonthChooserBeanInfo extends GenericBeanInfo {
-	/**
-	 * Constructs a new BeanInfo class for the JMonthChooser bean.
-	 */
-	public JMonthChooserBeanInfo() {
-	    super("JMonthChooser", true);
-	}
+    /**
+     * Constructs a new BeanInfo class for the JMonthChooser bean.
+     */
+    public JMonthChooserBeanInfo() {
+        super("JMonthChooser", true);
+    }
 }

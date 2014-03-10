@@ -27,34 +27,34 @@ import org.junit.Test;
 
 public class JDayChooserTest {
 
-	JDayChooser jDayChooser;
+    JDayChooser jDayChooser;
 
-	@Before
-	public void setUp() throws Exception {
-		jDayChooser = new JDayChooser();
-	}
+    @Before
+    public void setUp() throws Exception {
+        jDayChooser = new JDayChooser();
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		jDayChooser = null;
-	}
+    @After
+    public void tearDown() throws Exception {
+        jDayChooser = null;
+    }
 
-	@Test
-	public void testMonthJump() {
-		jDayChooser = new JDayChooser();
-		jDayChooser.setMonth(4); // May
-		jDayChooser.setDay(31);
-		jDayChooser.setMonth(5); // June
-		assertEquals(30, jDayChooser.getDay());
-		jDayChooser.setMonth(1); // February
-		assertEquals(28, jDayChooser.getDay());
-	}
+    @Test
+    public void testMonthJump() {
+        jDayChooser = new JDayChooser();
+        jDayChooser.setMonth(4); // May
+        jDayChooser.setDay(31);
+        jDayChooser.setMonth(5); // June
+        assertEquals(30, jDayChooser.getDay());
+        jDayChooser.setMonth(1); // February
+        assertEquals(28, jDayChooser.getDay());
+    }
 
-	public static void main(String... args) {
-		junit.textui.TestRunner.run(suite());
-	}
+    public static void main(String... args) {
+        junit.textui.TestRunner.run(suite());
+    }
 
-	public static junit.framework.Test suite() {
-		return new JUnit4TestAdapter(JDayChooserTest.class);
-	}
+    public static junit.framework.Test suite() {
+        return new JUnit4TestAdapter(JDayChooserTest.class);
+    }
 }

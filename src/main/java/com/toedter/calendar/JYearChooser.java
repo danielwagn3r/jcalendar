@@ -20,22 +20,21 @@
  */
 package com.toedter.calendar;
 
-import com.toedter.components.JSpinField;
-
 import java.util.Calendar;
 
 import javax.swing.JFrame;
 
+import com.toedter.components.JSpinField;
 
 /**
  * JYearChooser is a bean for choosing a year.
- *
+ * 
  * @version $LastChangedRevision: 85 $
  * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fri, 28 Apr 2006) $
  */
 public class JYearChooser extends JSpinField {
-	private static final long serialVersionUID = 2648810220491090064L;
-	protected JDayChooser dayChooser;
+    private static final long serialVersionUID = 2648810220491090064L;
+    protected JDayChooser dayChooser;
     protected int oldYear;
     protected int startYear;
     protected int endYear;
@@ -54,9 +53,10 @@ public class JYearChooser extends JSpinField {
 
     /**
      * Sets the year. This is a bound property.
-     *
-     * @param y the new year
-     *
+     * 
+     * @param y
+     *            the new year
+     * 
      * @see #getYear
      */
     public void setYear(int y) {
@@ -73,8 +73,9 @@ public class JYearChooser extends JSpinField {
 
     /**
      * Sets the year value.
-     *
-     * @param value the year value
+     * 
+     * @param value
+     *            the year value
      */
     public void setValue(int value) {
         setYear(value);
@@ -82,7 +83,7 @@ public class JYearChooser extends JSpinField {
 
     /**
      * Returns the year.
-     *
+     * 
      * @return the year
      */
     public int getYear() {
@@ -91,8 +92,9 @@ public class JYearChooser extends JSpinField {
 
     /**
      * Convenience method set a day chooser that might be updated directly.
-     *
-     * @param dayChooser the day chooser
+     * 
+     * @param dayChooser
+     *            the day chooser
      */
     public void setDayChooser(JDayChooser dayChooser) {
         this.dayChooser = dayChooser;
@@ -100,7 +102,7 @@ public class JYearChooser extends JSpinField {
 
     /**
      * Returns the endy ear.
-     *
+     * 
      * @return the end year
      */
     public int getEndYear() {
@@ -109,8 +111,9 @@ public class JYearChooser extends JSpinField {
 
     /**
      * Sets the end ear.
-     *
-     * @param endYear the end year
+     * 
+     * @param endYear
+     *            the end year
      */
     public void setEndYear(int endYear) {
         setMaximum(endYear);
@@ -118,7 +121,7 @@ public class JYearChooser extends JSpinField {
 
     /**
      * Returns the start year.
-     *
+     * 
      * @return the start year.
      */
     public int getStartYear() {
@@ -127,8 +130,9 @@ public class JYearChooser extends JSpinField {
 
     /**
      * Sets the start year.
-     *
-     * @param startYear the start year
+     * 
+     * @param startYear
+     *            the start year
      */
     public void setStartYear(int startYear) {
         setMinimum(startYear);
@@ -136,8 +140,9 @@ public class JYearChooser extends JSpinField {
 
     /**
      * Creates a JFrame with a JYearChooser inside and can be used for testing.
-     *
-     * @param s command line arguments
+     * 
+     * @param s
+     *            command line arguments
      */
     static public void main(String[] s) {
         JFrame frame = new JFrame("JYearChooser");
