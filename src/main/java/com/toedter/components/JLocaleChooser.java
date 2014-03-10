@@ -32,12 +32,12 @@ import javax.swing.JFrame;
 
 /**
  * JLocaleChooser is a bean for choosing locales.
- * 
+ *
  * @author Kai Toedter
  * @version $LastChangedRevision: 85 $
  * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fri, 28 Apr 2006) $
  */
-public class JLocaleChooser extends JComboBox implements ItemListener {
+public class JLocaleChooser extends JComboBox<String> implements ItemListener {
     private static final long serialVersionUID = 8152430789764877431L;
     protected JComponent component;
 
@@ -50,7 +50,7 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
 
     /**
      * Returns "JLocaleChoose".
-     * 
+     *
      * @return the name value
      */
     public String getName() {
@@ -92,7 +92,7 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
 
     /**
      * Sets the locale.
-     * 
+     *
      * @see #getLocale
      */
     private void setLocale(Locale l, boolean select) {
@@ -118,7 +118,7 @@ public class JLocaleChooser extends JComboBox implements ItemListener {
 
     /**
      * Sets the locale. This is a bound property.
-     * 
+     *
      * @see #getLocale
      */
     public void setLocale(Locale l) {
