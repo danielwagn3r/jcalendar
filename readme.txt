@@ -1,5 +1,5 @@
 =======================================================================
-JCalendar - v1.4.1.v201109071408 - 09/07/2011 - Readme File  - 
+JCalendar - v1.4.1-kwaxi-1 - 10/03/2014 - Readme File  - 
 =======================================================================
 
 (C) 1999 - 2011 Kai Toedter
@@ -32,10 +32,7 @@ They are listed and described below:
 
   bin\             contains a launch script for the JCalendar
                    demo application for Windows 7/Vista/XP/2000/NT/98.
-  lib\             contains the software binaries (jar files) for
-                   JCalendar, JUnit and the JGoodies Looks Look & Feel.
   doc              contains HTML documentation (start with index.html).
-  doc\api          contains JavaDoc documentation.
   src\             contains all the sources to create a distribution.
                
 
