@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.toedter</groupId>
     <artifactId>jcalendar</artifactId>
-    <version>1.4.1-kwaxi-1</version>
+    <version>1.4.1-kwaxi-2</version>
     <packaging>jar</packaging>
     <name>JCalendar</name>
     <url>http://www.toedter.com/en/jcalendar/index.html</url>
@@ -41,7 +41,7 @@
             <id>nexus</id>
             <url>https://repo.wagners.name/nexus/content/repositories/snapshots</url>
         </snapshotRepository>
-     </distributionManagement>
+    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -209,7 +209,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.16</version>
+                    <version>2.17</version>
                 </plugin>
 
                 <!--This plugin's configuration is used to store Eclipse m2e settings
@@ -257,10 +257,38 @@
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>2.7</version>
             </plugin>
+            <!-- <plugin> -->
+            <!-- <groupId>org.codehaus.mojo</groupId> -->
+            <!-- <artifactId>emma-maven-plugin</artifactId> -->
+            <!-- <version>1.0-alpha-3</version> -->
+            <!-- <inherited>true</inherited> -->
+            <!-- </plugin> -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jxr-maven-plugin</artifactId>
-                <version>2.3</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.17</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>2.4</version>
+                <reportSets>
+                    <reportSet>
+                        <id>src-xref</id>
+                        <reports>
+                            <report>jxr</report>
+                        </reports>
+                    </reportSet>
+                    <reportSet>
+                        <id>test-xref</id>
+                        <reports>
+                            <report>test-jxr</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+                <configuration>
+                    <aggregate>true</aggregate>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -282,17 +310,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>2.11</version>
+                <version>2.12</version>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.6</version>
-                <configuration>
-                    <formats>
-                        <format>xml</format>
-                    </formats>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -307,25 +330,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.1</version>
                 <configuration>
                     <targetJdk>${java.version}</targetJdk>
-                    <linkXref>true</linkXref>
-                    <typeResolution>true</typeResolution>
                 </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>pmd</report>
-                            <report>cpd</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>taglist-maven-plugin</artifactId>
-                <version>2.4</version>
             </plugin>
         </plugins>
     </reporting>
