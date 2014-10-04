@@ -89,7 +89,7 @@ import com.toedter.components.JTitlePanel;
 /**
  * A demonstration Applet for the JCalendar bean. The demo can also be started
  * as Java application.
- * 
+ *
  * @author Kai Toedter
  * @version $LastChangedRevision: 166 $
  * @version $LastChangedDate: 2011-06-26 21:58:35 +0200 (Sun, 26 Jun 2011) $
@@ -165,7 +165,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
     }
 
     /**
-     * Installs the JGoodies Look & Feels, if available, in classpath.
+     * Installs the JGoodies Look &amp; Feels, if available, in classpath.
      */
     public final void initializeLookAndFeels() {
         // if in classpath thry to load JGoodies Plastic Look & Feel
@@ -207,7 +207,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
     /**
      * Creates the menu bar
-     * 
+     *
      * @return Description of the Return Value
      */
     public JToolBar createToolBar() {
@@ -250,7 +250,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
     /**
      * Creates the menu bar
-     * 
+     *
      * @return Description of the Return Value
      */
     public JMenuBar createMenuBar() {
@@ -376,7 +376,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
     /**
      * The applet is a PropertyChangeListener for "locale" and "calendar".
-     * 
+     *
      * @param evt
      *            Description of the Parameter
      */
@@ -393,7 +393,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
     /**
      * Creates a JFrame with a JCalendarDemo inside and can be used for testing.
-     * 
+     *
      * @param s
      *            The command line arguments
      */
@@ -419,7 +419,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
     /**
      * Installes a demo bean.
-     * 
+     *
      * @param bean
      *            the demo bean
      */
@@ -700,7 +700,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
     /**
      * Action to show the About dialog
-     * 
+     *
      * @author toedter_k
      */
     class AboutAction extends AbstractAction {
@@ -709,7 +709,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
         /**
          * Constructor for the AboutAction object
-         * 
+         *
          * @param demo
          *            Description of the Parameter
          */
@@ -720,7 +720,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
         /**
          * Description of the Method
-         * 
+         *
          * @param event
          *            Description of the Parameter
          */
