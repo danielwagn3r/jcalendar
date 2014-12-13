@@ -42,10 +42,19 @@ public class JDayChooserTest {
     @Test
     public void testMonthJump() {
         jDayChooser = new JDayChooser();
+
+        // no leap-year
+        jDayChooser.setYear(2013);
+
+        // set date to May 31th
         jDayChooser.setMonth(4); // May
         jDayChooser.setDay(31);
+
+        // set month to June, date should jump to 30
         jDayChooser.setMonth(5); // June
         assertEquals(30, jDayChooser.getDay());
+
+        // set month to February, date should to 28
         jDayChooser.setMonth(1); // February
         assertEquals(28, jDayChooser.getDay());
     }
