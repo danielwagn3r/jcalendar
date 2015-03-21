@@ -38,7 +38,7 @@ import com.toedter.calendar.JSpinnerDateEditor;
 
 /**
  * A demonstration panel including several JDateChoosers.
- * 
+ *
  * @author Kai Toedter
  * @version $LastChangedRevision: 153 $
  * @version $LastChangedDate: 2011-06-09 16:49:22 +0200 (Thu, 09 Jun 2011) $
@@ -105,7 +105,7 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 
     /**
      * Gets the date format string.
-     * 
+     *
      * @return Returns the dateFormatString.
      */
     public String getDateFormatString() {
@@ -115,7 +115,7 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
     /**
      * Sets the date format string. E.g "MMMMM d, yyyy" will result in "July 21,
      * 2004" if this is the selected date and locale is English.
-     * 
+     *
      * @param dfString
      *            The dateFormatString to set.
      */
@@ -128,7 +128,7 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
     /**
      * Returns the date. If the JDateChooser is started with an empty date and
      * no date is set by the user, null is returned.
-     * 
+     *
      * @return the current date
      */
     public Date getDate() {
@@ -137,7 +137,7 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 
     /**
      * Sets the date. Fires the property change "date" if date != null.
-     * 
+     *
      * @param date
      *            the new date.
      */
@@ -148,7 +148,7 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
     }
 
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("date")) {
+        if ("date".equals(evt.getPropertyName())) {
             setDate((Date) evt.getNewValue());
         }
     }
@@ -171,7 +171,7 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.awt.Component#isEnabled()
      */
     public boolean isEnabled() {
@@ -180,7 +180,7 @@ public class DateChooserPanel extends JPanel implements PropertyChangeListener {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see javax.swing.JComponent#setEnabled(boolean)
      */
     public void setEnabled(boolean enabled) {
