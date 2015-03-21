@@ -203,7 +203,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
                 UIManager.setLookAndFeel(UIManager
                                 .getSystemLookAndFeelClassName());
             } catch (Exception e1) {
-            	log.debug("Cannot initialize look&feel.", e1);
+                log.debug("Cannot initialize look&feel.", e1);
             }
         }
     }
@@ -351,7 +351,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
                                                     divider.setBorder(null);
                                                 }
                                             } catch (Exception e) {
-                                            	log.debug("Unable to set UI {}", e.getMessage(), e);
+                                                log.debug("Unable to set UI {}", e.getMessage(), e);
                                             }
                                         }
                                     }
@@ -471,7 +471,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
                                                     .invoke(bean, (Object[]) null));
                                     isSelected = booleanObj.booleanValue();
                                 } catch (Exception e) {
-                                	log.debug("",e);
+                                    log.debug("",e);
                                 }
 
                                 final JCheckBox checkBox = new JCheckBox("",
@@ -492,7 +492,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
                                                                                                 false) });
                                             }
                                         } catch (Exception e) {
-                                        	log.debug("",e);
+                                            log.debug("",e);
                                         }
                                     }
                                 });
@@ -513,7 +513,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
                                                                                                                 .getNewValue() });
                                                             }
                                                         } catch (Exception e) {
-                                                        	log.debug("",e);
+                                                            log.debug("",e);
                                                         }
                                                     }
                                                 });
@@ -523,7 +523,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
                                                     .invoke(bean, (Object[]) null));
                                     spinField.setValue(integerObj.intValue());
                                 } catch (Exception e) {
-                                	log.debug("",e);
+                                    log.debug("",e);
                                 }
 
                                 addProperty(propertyDescriptors[i], spinField,
@@ -536,7 +536,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
                                     string = ((String) readMethod.invoke(bean,
                                                     (Object[]) null));
                                 } catch (Exception e) {
-                                	log.debug("",e);
+                                    log.debug("",e);
                                 }
 
                                 JTextField textField = new JTextField(string);
@@ -548,7 +548,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
                                                                             new Object[] { e
                                                                                             .getActionCommand() });
                                         } catch (Exception ex) {
-                                        	log.debug("",e);
+                                            log.debug("",e);
                                         }
                                     }
                                 };
@@ -576,7 +576,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
                                     date = ((Date) readMethod.invoke(bean,
                                                     (Object[]) null));
                                 } catch (Exception e) {
-                                	log.debug("",e);
+                                    log.debug("",e);
                                 }
 
                                 JDateChooser dateChooser = new JDateChooser(
@@ -594,7 +594,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
                                                                                                                 .getNewValue() });
                                                             }
                                                         } catch (Exception e) {
-                                                        	log.debug("",e);
+                                                            log.debug("",e);
                                                         }
                                                     }
                                                 });
@@ -626,14 +626,14 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
                                                                 .invoke(currentBean,
                                                                                 new Object[] { newColor });
                                             } catch (Exception e1) {
-                                            	log.debug("",e1);
+                                                log.debug("",e1);
                                             }
                                         }
                                     };
 
                                     button.addActionListener(actionListener);
                                 } catch (Exception e) {
-                                	log.debug("",e);
+                                    log.debug("",e);
                                 }
 
                                 addProperty(propertyDescriptors[i], button,
@@ -655,7 +655,7 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
             componentPanel.invalidate();
             componentPanel.repaint();
         } catch (IntrospectionException e) {
-        	log.debug("",e);
+            log.debug("",e);
         }
     }
 

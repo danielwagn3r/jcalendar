@@ -34,7 +34,7 @@ import java.util.Locale;
  */
 public class GenericBeanInfo extends SimpleBeanInfo {
 
-	/** 16x16 color icon. */
+    /** 16x16 color icon. */
     protected Image iconColor16;
 
     /** 32x32 color icon. */
@@ -86,8 +86,9 @@ public class GenericBeanInfo extends SimpleBeanInfo {
 
         case ICON_MONO_32x32:
             return iconMono32;
-        }
 
-        return null;
+            default:
+            	return null;
+        }
     }
 }
