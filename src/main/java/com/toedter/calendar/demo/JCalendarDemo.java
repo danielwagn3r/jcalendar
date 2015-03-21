@@ -381,13 +381,11 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
      *            Description of the Parameter
      */
     public void propertyChange(PropertyChangeEvent evt) {
-        if (calendarPanel != null) {
-            if ("calendar".equals(evt.getPropertyName())) {
-                // calendar = (Calendar) evt.getNewValue();
-                // DateFormat df = DateFormat.getDateInstance(DateFormat.LONG,
-                // jcalendar.getLocale());
-                // dateField.setText(df.format(calendar.getTime()));
-            }
+        if (calendarPanel != null && "calendar".equals(evt.getPropertyName())) {
+            // calendar = (Calendar) evt.getNewValue();
+            // DateFormat df = DateFormat.getDateInstance(DateFormat.LONG,
+            // jcalendar.getLocale());
+            // dateField.setText(df.format(calendar.getTime()));
         }
     }
 
