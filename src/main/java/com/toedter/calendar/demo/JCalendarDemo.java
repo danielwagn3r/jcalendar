@@ -195,12 +195,12 @@ public class JCalendarDemo extends JApplet implements PropertyChangeListener {
 
             UIManager
                             .setLookAndFeel("com.jgoodies.looks.plastic.Plastic3DLookAndFeel");
-        } catch (Throwable t) {
+        } catch (Exception e) {
             try {
                 UIManager.setLookAndFeel(UIManager
                                 .getSystemLookAndFeelClassName());
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception e1) {
+                e1.printStackTrace();
             }
         }
     }
