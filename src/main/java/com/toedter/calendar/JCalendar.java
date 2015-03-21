@@ -39,6 +39,8 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import lombok.extern.slf4j.Slf4j;
+
 import com.toedter.components.UTF8ResourceBundle;
 
 /**
@@ -48,6 +50,7 @@ import com.toedter.components.UTF8ResourceBundle;
  * @version $LastChangedRevision: 159 $
  * @version $LastChangedDate: 2011-06-22 21:07:24 +0200 (Wed, 22 Jun 2011) $
  */
+@Slf4j
 public class JCalendar extends JPanel implements PropertyChangeListener {
     private static final long serialVersionUID = 8913369762644440133L;
 
@@ -736,7 +739,7 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
                             "com.toedter.calendar.jcalendar", locale);
         } catch (Exception e) {
             // ignore, fall back to set texts or defaults
-            System.out.println(e.getMessage());
+            log.debug("Could not get resource bundle: {}", e.getMessage());
         }
 
         specialButtonPanel.removeAll();

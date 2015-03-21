@@ -25,7 +25,7 @@ import java.util.Locale;
 
 /**
  * Property editor for locales.
- * 
+ *
  * @author Kai Toedter
  * @version $LastChangedRevision: 85 $
  * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fri, 28 Apr 2006) $
@@ -48,22 +48,23 @@ public class LocaleEditor extends java.beans.PropertyEditorSupport {
 
     /**
      * Returns the locale strings.
-     * 
+     *
      * @return the locale strings
      */
     public String[] getTags() {
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < length; i++) {
             localeStrings[i] = locales[i].getDisplayName();
+        }
 
         return localeStrings;
     }
 
     /**
      * Sets the locale strings as text and invokes setValue( locale ).
-     * 
+     *
      * @param text
      *            the locale string text
-     * 
+     *
      * @throws IllegalArgumentException
      *             not used
      */
@@ -79,7 +80,7 @@ public class LocaleEditor extends java.beans.PropertyEditorSupport {
 
     /**
      * Returns the locale string as text.
-     * 
+     *
      * @return the locale string
      */
     public String getAsText() {

@@ -38,8 +38,9 @@ public abstract class UTF8ResourceBundle {
 
     public static final ResourceBundle getBundle(String baseName, Locale locale) {
         ResourceBundle bundle = ResourceBundle.getBundle(baseName, locale);
-        if (!(bundle instanceof PropertyResourceBundle))
+        if (!(bundle instanceof PropertyResourceBundle)) {
             return bundle;
+        }
 
         return new UTF8PropertyResourceBundle((PropertyResourceBundle) bundle);
     }

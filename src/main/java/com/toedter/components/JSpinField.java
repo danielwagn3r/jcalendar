@@ -49,7 +49,7 @@ import javax.swing.event.ChangeListener;
  * value. It has the same interface as the "old" JSpinField but uses a JSpinner
  * internally (since J2SE SDK 1.4) rather than a scrollbar for emulating the
  * spin buttons.
- * 
+ *
  * @author Kai Toedter
  * @version $LastChangedRevision: 85 $
  * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fri, 28 Apr 2006) $
@@ -83,8 +83,9 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
         super();
         setName("JSpinField");
         this.min = min;
-        if (max < min)
+        if (max < min) {
             max = min;
+        }
         this.max = max;
         value = 0;
         if (value < min)
@@ -126,7 +127,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Is invoked when the spinner model changes
-     * 
+     *
      * @param e
      *            the ChangeEvent
      */
@@ -138,7 +139,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Sets the value attribute of the JSpinField object.
-     * 
+     *
      * @param newValue
      *            The new value
      * @param updateTextField
@@ -166,10 +167,10 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Sets the value. This is a bound property.
-     * 
+     *
      * @param newValue
      *            the new value
-     * 
+     *
      * @see #getValue
      */
     public void setValue(int newValue) {
@@ -179,7 +180,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Returns the value.
-     * 
+     *
      * @return the value value
      */
     public int getValue() {
@@ -188,10 +189,10 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Sets the minimum value.
-     * 
+     *
      * @param newMinimum
      *            the new minimum value
-     * 
+     *
      * @see #getMinimum
      */
     public void setMinimum(int newMinimum) {
@@ -200,7 +201,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Returns the minimum value.
-     * 
+     *
      * @return the minimum value
      */
     public int getMinimum() {
@@ -209,10 +210,10 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Sets the maximum value and adjusts the preferred width.
-     * 
+     *
      * @param newMaximum
      *            the new maximum value
-     * 
+     *
      * @see #getMaximum
      */
     public void setMaximum(int newMaximum) {
@@ -221,7 +222,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Sets the horizontal alignment of the displayed value.
-     * 
+     *
      * @param alignment
      *            the horizontal alignment
      */
@@ -231,7 +232,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Returns the maximum value.
-     * 
+     *
      * @return the maximum value
      */
     public int getMaximum() {
@@ -240,7 +241,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Sets the font property.
-     * 
+     *
      * @param font
      *            the new font
      */
@@ -252,7 +253,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Sets the foreground
-     * 
+     *
      * @param fg
      *            the foreground
      */
@@ -265,7 +266,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
     /**
      * After any user input, the value of the textfield is proofed. Depending on
      * being an integer, the value is colored green or red.
-     * 
+     *
      * @param e
      *            the caret event
      */
@@ -294,7 +295,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
      * After any user input, the value of the textfield is proofed. Depending on
      * being an integer, the value is colored green or red. If the textfield is
      * green, the enter key is accepted and the new value is set.
-     * 
+     *
      * @param e
      *            Description of the Parameter
      */
@@ -306,7 +307,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Enable or disable the JSpinField.
-     * 
+     *
      * @param enabled
      *            The new enabled value
      */
@@ -327,7 +328,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
     /**
      * Returns the year chooser's spinner (which allow the focus to be set to
      * it).
-     * 
+     *
      * @return Component the spinner or null, if the month chooser has no
      *         spinner
      */
@@ -337,7 +338,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /**
      * Creates a JFrame with a JSpinField inside and can be used for testing.
-     * 
+     *
      * @param s
      *            The command line arguments
      */
@@ -350,7 +351,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.awt.event.FocusListener#focusGained(java.awt.event.FocusEvent)
      */
     public void focusGained(FocusEvent e) {

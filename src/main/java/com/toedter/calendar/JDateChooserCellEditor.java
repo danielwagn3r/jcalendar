@@ -30,7 +30,7 @@ import javax.swing.table.TableCellEditor;
 
 /**
  * A CellEditor for tables, using a JDateChooser.
- * 
+ *
  * @author Kai Toedter
  * @version $LastChangedRevision: 100 $
  * @version $LastChangedDate: 2006-06-04 14:36:06 +0200 (Sun, 04 Jun 2006) $
@@ -46,8 +46,9 @@ public class JDateChooserCellEditor extends AbstractCellEditor implements
                     boolean isSelected, int row, int column) {
 
         Date date = null;
-        if (value instanceof Date)
+        if (value instanceof Date) {
             date = (Date) value;
+        }
 
         dateChooser.setDate(date);
 
