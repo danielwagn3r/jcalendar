@@ -1029,7 +1029,7 @@ public class JDayChooser extends JPanel implements ActionListener, KeyListener,
             }
             super.paint(g);
         }
-    };
+    }
 
     public void addDateEvaluator(IDateEvaluator dateEvaluator) {
         dateEvaluators.add(dateEvaluator);

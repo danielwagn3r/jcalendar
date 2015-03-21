@@ -392,7 +392,8 @@ public class JMonthChooser extends JPanel implements ItemListener,
 
     public void paintComponent(Graphics g) {
         if ("Nimbus".equals(UIManager.getLookAndFeel().getID())) {
-            getParent().repaint(); // fixes repaint bug in Nimbus L&F
+        	// fixes repaint bug in Nimbus L&F
+            getParent().repaint();
         }
         super.paintComponent(g);
     }
