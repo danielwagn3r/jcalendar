@@ -252,8 +252,8 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
         }
 
         try {
-            Date date = dateFormatter.parse(getText());
-            if (dateUtil.checkDate(date)) {
+            Date dfDate = dateFormatter.parse(getText());
+            if (dateUtil.checkDate(dfDate)) {
                 setForeground(darkGreen);
             } else {
                 setForeground(Color.RED);
@@ -274,8 +274,8 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
 
     private void checkText() {
         try {
-            Date date = dateFormatter.parse(getText());
-            setDate(date, true);
+            Date dfDate = dateFormatter.parse(getText());
+            setDate(dfDate, true);
         } catch (Exception e) {
             // ignore
         }
@@ -354,15 +354,13 @@ public class JTextFieldDateEditor extends JFormattedTextField implements IDateEd
      */
     public void setMaskVisible(boolean isMaskVisible) {
         this.isMaskVisible = isMaskVisible;
-        if (isMaskVisible) {
-            if (maskFormatter == null) {
-                try {
-                    maskFormatter = new MaskFormatter(createMaskFromDatePattern(datePattern));
-                    maskFormatter.setPlaceholderCharacter(this.placeholder);
-                    maskFormatter.install(this);
-                } catch (ParseException e) {
-                    log.debug("", e);
-                }
+        if (isMaskVisible && maskFormatter == null) {
+            try {
+                maskFormatter = new MaskFormatter(createMaskFromDatePattern(datePattern));
+                maskFormatter.setPlaceholderCharacter(this.placeholder);
+                maskFormatter.install(this);
+            } catch (ParseException e) {
+                log.debug("", e);
             }
         }
     }

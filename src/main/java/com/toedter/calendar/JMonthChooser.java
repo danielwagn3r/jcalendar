@@ -162,13 +162,13 @@ public class JMonthChooser extends JPanel implements ItemListener,
         boolean increase = (value > oldSpinnerValue) ? true : false;
         oldSpinnerValue = value;
 
-        int month = getMonth();
+        int newMonth = getMonth();
 
         if (increase) {
-            month += 1;
+            newMonth += 1;
 
-            if (month == 12) {
-                month = 0;
+            if (newMonth == 12) {
+                newMonth = 0;
 
                 if (yearChooser != null) {
                     int year = yearChooser.getYear();
@@ -177,10 +177,10 @@ public class JMonthChooser extends JPanel implements ItemListener,
                 }
             }
         } else {
-            month -= 1;
+            newMonth -= 1;
 
-            if (month == -1) {
-                month = 11;
+            if (newMonth == -1) {
+                newMonth = 11;
 
                 if (yearChooser != null) {
                     int year = yearChooser.getYear();
@@ -190,7 +190,7 @@ public class JMonthChooser extends JPanel implements ItemListener,
             }
         }
 
-        setMonth(month);
+        setMonth(newMonth);
     }
 
     /**

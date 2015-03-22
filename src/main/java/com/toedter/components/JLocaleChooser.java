@@ -105,8 +105,10 @@ public class JLocaleChooser extends JComboBox<String> implements ItemListener {
         if (select) {
             for (int i = 0; i < localeCount; i++) {
                 if (locales[i].getCountry().length() > 0) {
-                    if (locales[i].equals(locale))
+                    if (locales[i].equals(locale)) {
                         setSelectedIndex(n);
+                    }
+
                     n += 1;
                 }
             }

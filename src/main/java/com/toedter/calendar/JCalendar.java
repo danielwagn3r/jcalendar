@@ -739,7 +739,7 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
                             "com.toedter.calendar.jcalendar", locale);
         } catch (Exception e) {
             // ignore, fall back to set texts or defaults
-            log.debug("Could not get resource bundle: {}", e.getMessage());
+            log.debug("Could not get resource bundle.", e);
         }
 
         specialButtonPanel.removeAll();
@@ -751,6 +751,7 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
                     text = resourceBundle.getString("todayButton.text");
                 } catch (Exception e) {
                     // ignore, fall back to set texts or defaults
+                    log.debug("Could not get string from resource bundle.", e);
                 }
             }
             if (text == null) {
@@ -767,6 +768,7 @@ public class JCalendar extends JPanel implements PropertyChangeListener {
                     text = resourceBundle.getString("nullDateButton.text");
                 } catch (Exception e) {
                     // ignore, fall back to set texts or defaults
+                    log.debug("Could not get string from resource bundle.", e);
                 }
             }
             if (text == null) {

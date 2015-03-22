@@ -27,6 +27,8 @@ import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * This class is a hack to read UTF-8 encoded property files. The implementation
  * is based on http://www.thoughtsabout.net/blog/archives/000044.html
@@ -34,6 +36,7 @@ import java.util.ResourceBundle;
  * @author Kai Toedter
  *
  */
+@Slf4j
 public abstract class UTF8ResourceBundle {
 
     public static final ResourceBundle getBundle(String baseName, Locale locale) {
@@ -61,9 +64,9 @@ public abstract class UTF8ResourceBundle {
             if (value != null) {
                 try {
                     return new String(value.getBytes("ISO-8859-1"), "UTF-8");
-                } catch (UnsupportedEncodingException exception) {
-                    throw new RuntimeException(
-                                    "UTF-8 encoding is not supported.", exception);
+                } catch (UnsupportedEncodingException e) {
+                    log.debug("UTF-8 encoding is not supported.", e);
+                    throw new IllegalArgumentException(e);
                 }
             }
             return null;

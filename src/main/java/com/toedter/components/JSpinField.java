@@ -44,6 +44,8 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * JSpinField is a numeric field with 2 spin buttons to increase or decrease the
  * value. It has the same interface as the "old" JSpinField but uses a JSpinner
@@ -54,6 +56,7 @@ import javax.swing.event.ChangeListener;
  * @version $LastChangedRevision: 85 $
  * @version $LastChangedDate: 2006-04-28 13:50:52 +0200 (Fri, 28 Apr 2006) $
  */
+@Slf4j
 public class JSpinField extends JPanel implements ChangeListener, CaretListener, ActionListener,
                 FocusListener {
     private static final long serialVersionUID = 1694904792717740650L;
@@ -83,15 +86,17 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
         super();
         setName("JSpinField");
         this.min = min;
-        if (max < min) {
-            max = min;
-        }
         this.max = max;
-        value = 0;
-        if (value < min)
-            value = min;
-        if (value > max)
-            value = max;
+        if (this.max < this.min) {
+            this.max = this.min;
+        }
+        this.value = 0;
+        if (this.value < this.min) {
+            this.value = this.min;
+        }
+        if (this.value > this.max) {
+            this.value = this.max;
+        }
 
         darkGreen = new Color(0, 150, 0);
         setLayout(new BorderLayout());
@@ -100,7 +105,7 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
         textField.addActionListener(this);
         textField.setHorizontalAlignment(SwingConstants.RIGHT);
         textField.setBorder(BorderFactory.createEmptyBorder());
-        textField.setText(Integer.toString(value));
+        textField.setText(Integer.toString(this.value));
         textField.addFocusListener(this);
         spinner = new JSpinner() {
             private static final long serialVersionUID = -6287709243342021172L;
@@ -133,8 +138,8 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
      */
     public void stateChanged(ChangeEvent e) {
         SpinnerNumberModel model = (SpinnerNumberModel) spinner.getModel();
-        int value = model.getNumber().intValue();
-        setValue(value);
+        int newValue = model.getNumber().intValue();
+        setValue(newValue);
     }
 
     /**
@@ -280,12 +285,11 @@ public class JSpinField extends JPanel implements ChangeListener, CaretListener,
             } else {
                 textField.setForeground(Color.red);
             }
+        } catch (NumberFormatException ex) {
+            textField.setForeground(Color.red);
         } catch (Exception ex) {
-            if (ex instanceof NumberFormatException) {
-                textField.setForeground(Color.red);
-            }
-
             // Ignore all other exceptions, e.g. illegal state exception
+            log.debug("", ex);
         }
 
         textField.repaint();

@@ -35,7 +35,7 @@ import javax.swing.border.Border;
 
 /**
  * A simple JPanel with a border and a title
- * 
+ *
  * @author Kai Toedter
  * @version $LastChangedRevision: 139 $
  * @version $LastChangedDate: 2011-06-04 19:50:51 +0200 (Sat, 04 Jun 2011) $
@@ -47,7 +47,7 @@ public class JTitlePanel extends JPanel {
 
     /**
      * Constructs a titled panel.
-     * 
+     *
      * @param title
      *            the title
      * @param content
@@ -71,7 +71,7 @@ public class JTitlePanel extends JPanel {
         titlePanel.setBorder(BorderFactory.createEmptyBorder(borderOffset, 4, borderOffset, 1));
         add(titlePanel, BorderLayout.NORTH);
 
-        JPanel northPanel = new JPanel();
+        northPanel = new JPanel();
         northPanel.setLayout(new BorderLayout());
         northPanel.add(content, BorderLayout.NORTH);
         northPanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));

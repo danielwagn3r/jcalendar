@@ -69,13 +69,14 @@ public class LocaleEditor extends java.beans.PropertyEditorSupport {
      *             not used
      */
     public void setAsText(String text) throws IllegalArgumentException {
-        for (int i = 0; i < length; i++)
+        for (int i = 0; i < length; i++) {
             if (text.equals(locales[i].getDisplayName())) {
                 locale = locales[i];
                 setValue(locale);
 
                 break;
             }
+        }
     }
 
     /**
