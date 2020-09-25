@@ -4,7 +4,7 @@
 
     <groupId>com.toedter</groupId>
     <artifactId>jcalendar</artifactId>
-    <version>1.4.1.4</version>
+    <version>1.4.1.5-SNAPSHOT</version>
 
     <packaging>jar</packaging>
 
@@ -15,7 +15,7 @@
     <parent>
         <groupId>name.wagners</groupId>
         <artifactId>maven-parent</artifactId>
-        <version>5</version>
+        <version>12</version>
     </parent>
 
     <organization>
